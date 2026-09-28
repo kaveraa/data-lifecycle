@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="1" stop-color="#16233A"/>
+    </linearGradient>
+    <clipPath id="card2">
+      <rect width="1280" height="440" rx="24"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#card2)">
+    <rect width="1280" height="440" fill="url(#bg2)"/>
+    <circle cx="60" cy="410" r="180" fill="#38bdf8" opacity="0.07"/>
+    <circle cx="1240" cy="-30" r="150" fill="#818cf8" opacity="0.08"/>
+  </g>
+
+  <!-- Sablier -->
+  <g transform="translate(78,86)" stroke="#38bdf8" stroke-width="5" fill="none" stroke-linejoin="round">
+    <path d="M6 4 H74 M6 96 H74"/>
+    <path d="M14 4 C14 36, 40 44, 40 50 C40 56, 14 64, 14 96"/>
+    <path d="M66 4 C66 36, 40 44, 40 50 C40 56, 66 64, 66 96"/>
+    <path d="M22 88 C28 72, 52 72, 58 88 Z" fill="#38bdf8" stroke="none"/>
+    <path d="M26 14 C32 30, 48 30, 54 14 Z" fill="#38bdf8" opacity="0.45" stroke="none"/>
+  </g>
+
+  <!-- Titre -->
+  <text x="182" y="128" font-size="56" font-weight="700" fill="#f8fafc">Data Lifecycle</text>
+  <text x="80" y="228" font-size="25" fill="#94a3b8">One rule per entity: how long you keep it,</text>
+  <text x="80" y="264" font-size="25" fill="#94a3b8">and what happens when the time is over.</text>
+
+  <!-- Etiquettes -->
+  <g font-size="19" font-weight="600" text-anchor="middle">
+    <rect x="80" y="304" width="148" height="42" rx="21" fill="#0EA5E9" opacity="0.16"/>
+    <text x="154" y="332" fill="#7DD3FC">Retention</text>
+    <rect x="240" y="304" width="176" height="42" rx="21" fill="#0EA5E9" opacity="0.16"/>
+    <text x="328" y="332" fill="#7DD3FC">Grace period</text>
+    <rect x="428" y="304" width="162" height="42" rx="21" fill="#0EA5E9" opacity="0.16"/>
+    <text x="509" y="332" fill="#7DD3FC">Anonymise</text>
+  </g>
+  <text x="80" y="398" font-size="21" fill="#64748b" font-family="Consolas, 'Courier New', monospace">composer require kaveraa/data-lifecycle</text>
+
+  <!-- Fenetre de code -->
+  <g>
+    <rect x="640" y="64" width="576" height="312" rx="16" fill="#0B1220" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="2"/>
+    <circle cx="670" cy="94" r="7" fill="#FF5F57"/>
+    <circle cx="694" cy="94" r="7" fill="#FEBC2E"/>
+    <circle cx="718" cy="94" r="7" fill="#28C840"/>
+    <text x="1188" y="100" font-size="15" fill="#6B7F90" text-anchor="end">User.php</text>
+
+    <g font-family="Consolas, 'Courier New', monospace" font-size="21">
+      <text x="672" y="152"><tspan fill="#C792EA">#[</tspan><tspan fill="#38BDF8">KeepFor</tspan><tspan fill="#E6EDF3">(</tspan><tspan fill="#F4C27A">'3 years'</tspan><tspan fill="#E6EDF3">)]</tspan></text>
+      <text x="672" y="186"><tspan fill="#C792EA">#[</tspan><tspan fill="#38BDF8">WarnBefore</tspan><tspan fill="#E6EDF3">(</tspan><tspan fill="#F4C27A">'30 days'</tspan><tspan fill="#E6EDF3">)]</tspan></text>
+      <text x="672" y="220"><tspan fill="#C792EA">#[</tspan><tspan fill="#38BDF8">ThenAnonymise</tspan><tspan fill="#E6EDF3">(</tspan><tspan fill="#F4C27A">'email'</tspan><tspan fill="#E6EDF3">, </tspan><tspan fill="#F4C27A">'name'</tspan><tspan fill="#E6EDF3">)]</tspan></text>
+      <text x="672" y="254"><tspan fill="#C792EA">class</tspan><tspan fill="#E6EDF3"> </tspan><tspan fill="#8BE9A0">User</tspan><tspan fill="#E6EDF3"> { }</tspan></text>
+      <text x="672" y="316"><tspan fill="#6B7F90">$ php artisan lifecycle:run --dry-run</tspan></text>
+      <text x="672" y="348"><tspan fill="#8BE9A0">  1 204 users</tspan><tspan fill="#6B7F90"> would be anonymised</tspan></text>
+    </g>
+  </g>
+</svg>

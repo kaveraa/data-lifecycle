@@ -1,0 +1,72 @@
+{
+    "name": "kaveraa/data-lifecycle",
+    "description": "Conservation et cycle de vie des données personnelles pour Laravel et Symfony/Doctrine : durée de conservation, rappel avant échéance, désactivation avec période de grâce, puis anonymisation ou suppression.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "gdpr",
+        "rgpd",
+        "retention",
+        "privacy",
+        "anonymize",
+        "inactive-users",
+        "lifecycle",
+        "laravel",
+        "eloquent",
+        "symfony",
+        "doctrine"
+    ],
+    "authors": [
+        {
+            "name": "Augustin Kavera",
+            "homepage": "https://github.com/kaveraa"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "psr/clock": "^1.0",
+        "psr/event-dispatcher": "^1.0"
+    },
+    "require-dev": {
+        "doctrine/doctrine-bundle": "^2.13 || ^3.0",
+        "doctrine/orm": "^3.3",
+        "orchestra/testbench": "^10.0 || ^11.0",
+        "phpunit/phpunit": "^11.0 || ^12.0",
+        "symfony/config": "^7.2 || ^8.0",
+        "symfony/console": "^7.2 || ^8.0",
+        "symfony/dependency-injection": "^7.2 || ^8.0",
+        "symfony/doctrine-bridge": "^7.2 || ^8.0",
+        "symfony/framework-bundle": "^7.2 || ^8.0",
+        "symfony/http-kernel": "^7.2 || ^8.0"
+    },
+    "suggest": {
+        "laravel/framework": "Pour le fournisseur de services, les commandes artisan et le pilote Eloquent (Laravel 12+)",
+        "doctrine/orm": "Pour le pilote Doctrine (ORM 3+)",
+        "symfony/framework-bundle": "Pour le bundle Symfony et les commandes console"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kaveraa\\DataLifecycle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kaveraa\\DataLifecycle\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Kaveraa\\DataLifecycle\\Laravel\\DataLifecycleServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
