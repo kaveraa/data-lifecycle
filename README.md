@@ -4,81 +4,81 @@
 
 [![Tests](https://github.com/kaveraa/data-lifecycle/actions/workflows/tests.yml/badge.svg)](https://github.com/kaveraa/data-lifecycle/actions/workflows/tests.yml)
 [![Packagist](https://img.shields.io/packagist/v/kaveraa/data-lifecycle.svg)](https://packagist.org/packages/kaveraa/data-lifecycle)
-[![Téléchargements](https://img.shields.io/packagist/dt/kaveraa/data-lifecycle.svg)](https://packagist.org/packages/kaveraa/data-lifecycle)
+[![Downloads](https://img.shields.io/packagist/dt/kaveraa/data-lifecycle.svg)](https://packagist.org/packages/kaveraa/data-lifecycle)
 [![PHP](https://img.shields.io/packagist/dependency-v/kaveraa/data-lifecycle/php.svg)](https://packagist.org/packages/kaveraa/data-lifecycle)
-[![Licence](https://img.shields.io/github/license/kaveraa/data-lifecycle.svg)](https://github.com/kaveraa/data-lifecycle/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/kaveraa/data-lifecycle.svg)](https://github.com/kaveraa/data-lifecycle/blob/main/LICENSE)
 
-**Français** - [English](https://github.com/kaveraa/data-lifecycle/blob/main/README.en.md)
+**English** - [Français](https://github.com/kaveraa/data-lifecycle/blob/main/README.fr.md)
 
-Le RGPD demande de ne pas garder les données personnelles plus longtemps que nécessaire (article 5.1.e). Dans la vraie vie, presque personne ne le fait : il faudrait repérer les comptes inactifs, prévenir les personnes, désactiver sans tout casser, laisser une chance de revenir, puis anonymiser ou supprimer. Et pouvoir le montrer.
+The GDPR asks you not to keep personal data longer than needed (article 5.1.e). In real life almost nobody does it: you would have to find the idle accounts, warn the people, disable without breaking anything, leave a way back, then anonymise or delete. And be able to show it.
 
-Ce paquet fait ce parcours, en **une déclaration par entité**, pour **Laravel** et pour **Symfony / Doctrine**.
+This package does that journey, with **one declaration per entity**, for **Laravel** and for **Symfony / Doctrine**.
 
 ```php
-#[KeepFor('3 years')]             // on garde 3 ans apres le dernier signe de vie
-#[WarnBefore('30 days')]          // un e-mail 30 jours avant l'echeance
-#[DisableFirst('30 days')]        // desactivation, puis 30 jours pour revenir
-#[ThenAnonymise('email', 'name')] // ensuite, la ligne reste mais elle est anonyme
+#[KeepFor('3 years')]             // kept 3 years after the last sign of life
+#[WarnBefore('30 days')]          // an email 30 days before the deadline
+#[DisableFirst('30 days')]        // disabled, then 30 days to come back
+#[ThenAnonymise('email', 'name')] // after that the row stays, but anonymous
 class User
 {
 }
 ```
 
 ```bash
-php artisan lifecycle:report   # ce qui se passerait, sans rien ecrire
-php artisan lifecycle:run      # pour de vrai
+php artisan lifecycle:report   # what would happen, without writing anything
+php artisan lifecycle:run      # for real
 ```
 
-- **Le parcours entier** : prévenir, désactiver, laisser une période de grâce, puis anonymiser ou supprimer. Pas seulement supprimer.
-- **Mode observation** : `lifecycle:report` dit exactement combien de lignes seraient touchées, et lesquelles, sans écrire une seule fois. C'est ce qu'on lance en production pendant des semaines avant d'oser le reste.
-- **Réversible** : tant que la période de grâce dure, la personne qui revient retrouve son compte intact, et le compteur repart de zéro.
-- **Aucun schéma imposé** : une règle ne lit que les colonnes dont elle a besoin. Une règle simple fonctionne avec une seule colonne de date.
-- **Deux frameworks, un seul paquet** : le cycle est écrit une fois, en PHP pur ; Laravel et Doctrine ne sont que des pilotes.
-- **Testable** : une horloge se remplace (`FrozenClock`), donc trois ans passent en trois lignes de test.
-- **Léger** : deux interfaces PSR, rien d'autre.
+- **The whole journey**: warn, disable, leave a grace period, then anonymise or delete. Not only delete.
+- **Observe mode**: `lifecycle:report` says exactly how many rows would be touched, and which ones, without a single write. This is what you run in production for weeks before daring the rest.
+- **Reversible**: while the grace period lasts, a person who comes back finds the account untouched, and the clock restarts.
+- **No schema is forced**: a policy only reads the columns it needs. A simple policy works with a single date column.
+- **Two frameworks, one package**: the cycle is written once, in plain PHP; Laravel and Doctrine are only drivers.
+- **Testable**: the clock can be replaced (`FrozenClock`), so three years pass in three lines of test.
+- **Light**: two PSR interfaces, nothing else.
 
 ---
 
-## Sommaire
+## Table of contents
 
-- [Le problème](#le-problème)
-- [Prérequis](#prérequis)
+- [The problem](#the-problem)
+- [Requirements](#requirements)
 - [Installation](#installation)
-- [Déclarer une règle](#déclarer-une-règle)
-- [Les colonnes à ajouter](#les-colonnes-à-ajouter)
-- [Lancer le cycle](#lancer-le-cycle)
-- [Le mode observation](#le-mode-observation)
-- [Prévenir la personne](#prévenir-la-personne)
-- [Quand la personne revient](#quand-la-personne-revient)
-- [Anonymiser](#anonymiser)
-- [Le signal d'activité](#le-signal-dactivité)
-- [Savoir où en est une ligne](#savoir-où-en-est-une-ligne)
-- [Toutes les options](#toutes-les-options)
-- [Ce que ce paquet ne fait pas](#ce-que-ce-paquet-ne-fait-pas)
-- [Développement](#développement)
+- [Write a policy](#write-a-policy)
+- [The columns to add](#the-columns-to-add)
+- [Run the cycle](#run-the-cycle)
+- [Observe mode](#observe-mode)
+- [Warn the person](#warn-the-person)
+- [When the person comes back](#when-the-person-comes-back)
+- [Anonymise](#anonymise)
+- [The activity signal](#the-activity-signal)
+- [Where a row stands](#where-a-row-stands)
+- [All the options](#all-the-options)
+- [What this package does not do](#what-this-package-does-not-do)
+- [Development](#development)
 
-## Le problème
+## The problem
 
-Une base de données garde tout, pour toujours, par défaut. Les comptes abandonnés depuis six ans sont encore là, avec leur adresse, leur nom, leur historique. C'est un risque en cas de fuite, et c'est contraire au RGPD.
+A database keeps everything, forever, by default. Accounts left behind six years ago are still there, with their address, their name, their history. It is a risk if data leaks, and it goes against the GDPR.
 
-La réponse habituelle est un script maison, lancé une fois, qui supprime en masse. Il fait peur, donc personne ne le lance. Ce paquet remplace ce script par quelque chose qu'on ose exécuter :
+The usual answer is a home-made script, run once, that deletes in bulk. It is frightening, so nobody runs it. This package replaces that script with something you dare to run:
 
 ```
-dernier signe de vie                                                    aujourd'hui
+last sign of life                                                          today
         |                                                                    |
-        |------------------- 3 ans (KeepFor) --------------------|           |
+        |------------------- 3 years (KeepFor) ------------------|           |
                                           |                      |           |
-                                    rappel J-30            desactivation  anonymisation
-                                    (WarnBefore)          (DisableFirst)   ou suppression
-                                                          |<- 30 jours ->|
-                                                           pour revenir
+                                    reminder D-30            disabled    anonymised
+                                    (WarnBefore)          (DisableFirst)  or deleted
+                                                          |<- 30 days ->|
+                                                           to come back
 ```
 
-## Prérequis
+## Requirements
 
-- PHP 8.2 ou plus.
-- Laravel 12+, ou Symfony 7.2+ avec Doctrine ORM 3+.
-- Une colonne de date par entité concernée : le dernier signe de vie (`last_active_at`, `last_order_at`, `sent_at`, à vous de choisir).
+- PHP 8.2 or more.
+- Laravel 12+, or Symfony 7.2+ with Doctrine ORM 3+.
+- One date column per entity: the last sign of life (`last_active_at`, `last_order_at`, `sent_at`, your choice).
 
 ## Installation
 
@@ -92,11 +92,11 @@ composer require kaveraa/data-lifecycle
 php artisan lifecycle:install
 ```
 
-La commande publie `config/data-lifecycle.php` et une migration d'exemple. Le fournisseur de services est découvert tout seul.
+The command publishes `config/data-lifecycle.php` and an example migration. The service provider is found on its own.
 
 ### Symfony
 
-Ajoutez le bundle dans `config/bundles.php` :
+Add the bundle in `config/bundles.php`:
 
 ```php
 return [
@@ -105,7 +105,7 @@ return [
 ];
 ```
 
-Puis créez `config/packages/data_lifecycle.yaml` :
+Then write `config/packages/data_lifecycle.yaml`:
 
 ```yaml
 data_lifecycle:
@@ -113,11 +113,11 @@ data_lifecycle:
         - App\Entity\User
 ```
 
-## Déclarer une règle
+## Write a policy
 
-Deux façons, au choix. Les attributs sont plus lisibles, la configuration est plus pratique quand la règle change selon l'environnement. Si les deux existent pour une même classe, la configuration gagne.
+Two ways, as you like. Attributes read better, configuration is handier when the rule changes with the environment. If both exist for the same class, configuration wins.
 
-### Avec des attributs
+### With attributes
 
 ```php
 use Kaveraa\DataLifecycle\Attribute\DisableFirst;
@@ -137,7 +137,7 @@ class User extends Authenticatable
 }
 ```
 
-Une entité peut n'avoir qu'un début et une fin :
+An entity can have only a start and an end:
 
 ```php
 #[KeepFor('90 days', since: 'sent_at')]
@@ -147,7 +147,7 @@ class Invitation
 }
 ```
 
-Il faut ensuite dire où chercher ces classes, dans `discover` :
+Then say where to look for these classes, in `discover`:
 
 ```php
 // config/data-lifecycle.php
@@ -157,7 +157,7 @@ Il faut ensuite dire où chercher ces classes, dans `discover` :
 ],
 ```
 
-### Avec la configuration
+### With configuration
 
 ```php
 // config/data-lifecycle.php
@@ -177,98 +177,98 @@ Il faut ensuite dire où chercher ces classes, dans `discover` :
 ],
 ```
 
-Les durées s'écrivent en toutes lettres : `3 years`, `18 months`, `30 days`, `48 hours`. La forme ISO 8601 (`P30D`) est acceptée aussi.
+Durations are written in plain words: `3 years`, `18 months`, `30 days`, `48 hours`. The ISO 8601 form (`P30D`) works too.
 
-## Les colonnes à ajouter
+## The columns to add
 
-Vous n'ajoutez que les colonnes dont votre règle a besoin.
+You only add the columns your policy needs.
 
-| Colonne | Quand elle est nécessaire | Type |
+| Column | When it is needed | Type |
 |---|---|---|
-| `last_active_at` | toujours (c'est le point de départ) | date, nullable |
-| `lifecycle_warn_stage` | seulement avec `#[WarnBefore]` | petit entier, défaut 0 |
-| `lifecycle_warned_at` | seulement avec `#[WarnBefore]` | date, nullable |
-| `disabled_at` | seulement avec `#[DisableFirst]` | date, nullable |
-| `anonymised_at` | seulement avec `#[ThenAnonymise]` | date, nullable |
+| `last_active_at` | always (it is the starting point) | date, nullable |
+| `lifecycle_warn_stage` | only with `#[WarnBefore]` | small integer, default 0 |
+| `lifecycle_warned_at` | only with `#[WarnBefore]` | date, nullable |
+| `disabled_at` | only with `#[DisableFirst]` | date, nullable |
+| `anonymised_at` | only with `#[ThenAnonymise]` | date, nullable |
 
-Une règle `#[KeepFor] + #[ThenDelete]` n'a donc besoin **que** de la colonne de date. Les noms se changent, globalement ou règle par règle :
+So a `#[KeepFor] + #[ThenDelete]` policy needs **only** the date column. The names can be changed, globally or policy by policy:
 
 ```php
-'fields' => ['since' => 'derniere_activite', 'disabled_at' => 'desactive_le'],
+'fields' => ['since' => 'seen_at', 'disabled_at' => 'blocked_at'],
 ```
 
-Pensez à un index sur la colonne de date, et sur `disabled_at` : ce sont elles qui portent les requêtes.
+Add an index on the date column, and on `disabled_at`: they carry the queries.
 
-## Lancer le cycle
+## Run the cycle
 
 ```bash
-php artisan lifecycle:run                       # tout, pour de vrai
-php artisan lifecycle:run --dry-run             # sans rien ecrire
+php artisan lifecycle:run                       # everything, for real
+php artisan lifecycle:run --dry-run             # without writing anything
 php artisan lifecycle:run --subject="App\Models\User"
-php artisan lifecycle:run --step=warn           # seulement les rappels
-php artisan lifecycle:run --limit=500           # au maximum 500 lignes par etape
+php artisan lifecycle:run --step=warn           # only the reminders
+php artisan lifecycle:run --limit=500           # at most 500 rows per step
 ```
 
-Sous Symfony, les mêmes commandes s'appellent `bin/console lifecycle:run` et `bin/console lifecycle:report`.
+With Symfony the same commands are `bin/console lifecycle:run` and `bin/console lifecycle:report`.
 
-Une fois par jour suffit. Laravel :
+Once a day is enough. Laravel:
 
 ```php
 // routes/console.php
 Schedule::command('lifecycle:run')->dailyAt('03:30');
 ```
 
-Symfony, avec cron :
+Symfony, with cron:
 
 ```
 30 3 * * * /usr/bin/php /var/www/bin/console lifecycle:run
 ```
 
-L'exécution est faite pour être coupée et reprise : `--limit` borne chaque étape, et la commande suivante reprendra là où elle en était.
+A run is made to be stopped and resumed: `--limit` bounds every step, and the next run carries on where it stopped.
 
-### La première exécution
+### The first run
 
-Sur une base qui n'a jamais été nettoyée, tout le retard sort d'un coup : des milliers de lignes sont déjà au-delà de l'échéance. Elles reçoivent leur premier rappel, puis sont désactivées dans la même exécution, ce qui ne laisse à personne le temps de réagir. Deux précautions :
+On a database that was never cleaned, the whole backlog comes out at once: thousands of rows are already past the deadline. They get their first reminder, then are disabled in the same run, which leaves nobody time to react. Two precautions:
 
-1. Lancez `lifecycle:report` d'abord, et regardez les nombres.
-2. Rattrapez le retard en douceur : jouez `--step=warn` seul pendant la durée de votre rappel (30 jours si vous prévenez 30 jours avant), puis seulement ensuite la commande complète.
+1. Run `lifecycle:report` first, and look at the numbers.
+2. Catch up gently: play `--step=warn` alone for the length of your reminder (30 days if you warn 30 days before), and only then the full command.
 
 ```bash
-php artisan lifecycle:run --step=warn --limit=200   # pendant 30 jours
-php artisan lifecycle:run                           # ensuite
+php artisan lifecycle:run --step=warn --limit=200   # for 30 days
+php artisan lifecycle:run                           # after that
 ```
 
-## Le mode observation
+## Observe mode
 
-C'est la porte d'entrée du paquet. Rien n'est écrit, aucun événement n'est émis, et le rapport dit ce qui se passerait :
+This is the front door of the package. Nothing is written, no event is sent, and the report says what would happen:
 
 ```bash
 php artisan lifecycle:report
 ```
 
 ```
-Essai a blanc : rien n'a ete ecrit.
+Dry run: nothing was written.
 
- Entite       Etape      Lignes   Exemples
+ Entity       Step       Rows     Examples
  User         warn          412   18, 45, 61, 88, 90
  User         disable        73   7, 12, 30, 44, 51
  User         erase          19   3, 9, 14, 21, 25
  Invitation   erase       1 204   2, 4, 5, 6, 8
 ```
 
-Une ligne très en retard peut apparaître deux fois, dans `warn` et dans `disable` : en observation rien n'est écrit entre les deux étapes, donc le rapport montre bien ce qu'une vraie exécution ferait, l'une après l'autre.
+A row that is very late can show up twice, in `warn` and in `disable`: in observe mode nothing is written between the two steps, so the report shows exactly what a real run would do, one step after the other.
 
-Laissez-le tourner quelques semaines dans une tâche planifiée, regardez les nombres se stabiliser, puis enlevez `--dry-run`. On peut aussi bloquer toute écriture depuis la configuration, le temps de la mise en place :
+Let it run for a few weeks in a scheduled task, watch the numbers settle, then remove `--dry-run`. Writing can also be blocked from the configuration while you set things up:
 
 ```dotenv
 DATA_LIFECYCLE_DRY_RUN=true
 ```
 
-Tant que ce réglage est vrai, `lifecycle:run` reste en observation et le dit.
+As long as this setting is true, `lifecycle:run` stays in observe mode and says so.
 
-## Prévenir la personne
+## Warn the person
 
-Le paquet n'envoie aucun e-mail : il vous dit quand le faire, et vous écrivez le message. Cinq événements existent, écoutables comme n'importe quel événement de votre framework.
+The package sends no email: it tells you when to send one, and you write the message. There are five events, listened to like any event of your framework.
 
 ```php
 use Kaveraa\DataLifecycle\Event\SubjectWarned;
@@ -277,25 +277,25 @@ Event::listen(function (SubjectWarned $event): void {
     $user = $event->entity();
 
     Mail::to($user)->send(new AccountExpiring(
-        dueAt: $event->dueAt,      // date de la desactivation
-        reminder: $event->warnIndex, // 0 pour le premier rappel, 1 pour le suivant
+        dueAt: $event->dueAt,        // date of the disabling
+        reminder: $event->warnIndex, // 0 for the first reminder, 1 for the next one
     ));
 });
 ```
 
-| Événement | Quand |
+| Event | When |
 |---|---|
-| `SubjectWarned` | un rappel doit partir |
-| `SubjectDisabled` | la ligne vient d'être désactivée |
-| `SubjectAnonymised` | les données personnelles sont parties |
-| `SubjectDeleted` | la ligne a été supprimée |
-| `SubjectReactivated` | la personne est revenue |
+| `SubjectWarned` | a reminder has to go out |
+| `SubjectDisabled` | the row has just been disabled |
+| `SubjectAnonymised` | the personal data is gone |
+| `SubjectDeleted` | the row has been deleted |
+| `SubjectReactivated` | the person came back |
 
-Aucun événement n'est émis en mode observation.
+No event is sent in observe mode.
 
-## Quand la personne revient
+## When the person comes back
 
-C'est tout l'intérêt de la période de grâce : la désactivation n'est pas une suppression.
+This is the whole point of the grace period: disabling is not deleting.
 
 ```php
 use Kaveraa\DataLifecycle\Lifecycle;
@@ -303,40 +303,40 @@ use Kaveraa\DataLifecycle\Lifecycle;
 public function login(Request $request, Lifecycle $lifecycle)
 {
     // ...
-    $lifecycle->reactivate($user); // plus de rappel, plus de desactivation, compteur remis a zero
+    $lifecycle->reactivate($user); // no more reminder, no more disabling, clock back to zero
 }
 ```
 
-`reactivate()` renvoie `false` sur une ligne déjà anonymisée : ce qui est parti ne revient pas.
+`reactivate()` returns `false` on a row that is already anonymised: what is gone does not come back.
 
-## Anonymiser
+## Anonymise
 
-Anonymiser plutôt que supprimer garde vos compteurs justes (commandes, statistiques, factures) tout en faisant disparaître la personne.
+Anonymising instead of deleting keeps your counts right (orders, statistics, invoices) while the person disappears.
 
 ```php
 #[ThenAnonymise('email', 'name')]
 ```
 
-Chaque champ reçoit une stratégie. Sans précision, `Strategy::Auto` choisit d'après le nom : un champ qui contient `mail` reçoit une adresse, tout le reste reçoit `[removed]`.
+Every field gets a strategy. Without one, `Strategy::Auto` chooses from the name: a field that contains `mail` gets an address, everything else gets `[removed]`.
 
-| Stratégie | Résultat |
+| Strategy | Result |
 |---|---|
-| `Strategy::Email` | `anonymous-42@anonymous.invalid`, unique par ligne |
+| `Strategy::Email` | `anonymous-42@anonymous.invalid`, one per row |
 | `Strategy::Text` | `Anonymous` |
 | `Strategy::Redact` | `[removed]` |
-| `Strategy::EmptyText` | une chaîne vide |
-| `Strategy::Nullify` | `null` (la colonne doit l'accepter) |
+| `Strategy::EmptyText` | an empty string |
+| `Strategy::Nullify` | `null` (the column must accept it) |
 | `Strategy::Zero` | `0` |
-| `Strategy::YearOnly` | garde l'année d'une date, met le 1er janvier |
-| `Strategy::Hash` | une empreinte : la valeur ne revient pas, mais deux valeurs égales le restent |
+| `Strategy::YearOnly` | keeps the year of a date, sets the 1st of January |
+| `Strategy::Hash` | a fingerprint: the value does not come back, but two equal values stay equal |
 
-`Strategy::Hash` sert quand vous avez besoin de savoir que deux lignes venaient de la même personne, sans savoir qui. Les textes de remplacement se changent dans la configuration.
+`Strategy::Hash` helps when you need to know that two rows came from the same person, without knowing who. The replacement texts can be changed in the configuration.
 
-## Le signal d'activité
+## The activity signal
 
-Tout repose sur une date fiable. Écrire `last_active_at` à chaque requête coûte une écriture par requête : inacceptable. Le paquet fournit un garde-fou qui n'écrit qu'une fois par fenêtre (15 minutes par défaut).
+Everything rests on a date you can trust. Writing `last_active_at` on every request costs one write per request: not acceptable. The package ships a guard that writes only once per window (15 minutes by default).
 
-Laravel, dans `bootstrap/app.php` :
+Laravel, in `bootstrap/app.php`:
 
 ```php
 $middleware->web(append: [
@@ -344,18 +344,18 @@ $middleware->web(append: [
 ]);
 ```
 
-Sous Symfony, l'abonné est branché tout seul par le bundle. La fenêtre se règle avec `activity.throttle` (en minutes ; `0` désactive complètement).
+With Symfony the listener is wired by the bundle. The window is set with `activity.throttle` (in minutes; `0` turns it off).
 
-Attention au piège : une connexion automatique par cookie, un appel d'API de supervision ou une tâche planifiée qui touche la table remettent le compteur à zéro. Un compte "actif" parce qu'un robot passe dessus n'est pas actif. Choisissez comme point de départ une action volontaire de la personne.
+Watch out for the trap: an automatic login from a cookie, a monitoring call or a scheduled task that touches the table will reset the clock. An account that looks active because a robot goes through it is not active. Pick a deliberate action of the person as the starting point.
 
-## Savoir où en est une ligne
+## Where a row stands
 
 ```php
-$lifecycle->stageOf($user);  // Stage::Active, Warned, Disabled ou Erased
-$lifecycle->dueAt($user);    // date de la desactivation a venir
+$lifecycle->stageOf($user);  // Stage::Active, Warned, Disabled or Erased
+$lifecycle->dueAt($user);    // date of the coming disabling
 ```
 
-Avec Laravel, le trait `HasLifecycle` ajoute les mêmes réponses sur le modèle, et des scopes :
+With Laravel, the `HasLifecycle` trait puts the same answers on the model, plus scopes:
 
 ```php
 use Kaveraa\DataLifecycle\Laravel\Concerns\HasLifecycle;
@@ -372,33 +372,33 @@ $user->lifecycleDueAt();
 $user->reactivate();
 ```
 
-## Toutes les options
+## All the options
 
-| Option | Défaut | Rôle |
+| Option | Default | Role |
 |---|---|---|
-| `dry_run` | `false` | Bloque toute écriture, partout |
-| `limit` | `1000` | Lignes maximum par étape et par règle |
-| `fields.since` | `last_active_at` | Colonne du dernier signe de vie |
-| `fields.warn_stage` | `lifecycle_warn_stage` | Nombre de rappels déjà envoyés |
-| `fields.warned_at` | `lifecycle_warned_at` | Date du dernier rappel |
-| `fields.disabled_at` | `disabled_at` | Date de désactivation |
-| `fields.anonymised_at` | `anonymised_at` | Date d'anonymisation |
-| `anonymiser.email_domain` | `anonymous.invalid` | Domaine des adresses de remplacement |
-| `anonymiser.redacted_text` | `[removed]` | Texte de remplacement |
-| `anonymiser.anonymous_name` | `Anonymous` | Nom de remplacement |
-| `anonymiser.pepper` | la clé de l'application | Sel de `Strategy::Hash` |
-| `activity.throttle` | `15` | Minutes entre deux écritures du signal d'activité |
-| `subjects` | `[]` | Les règles écrites en configuration |
-| `discover` | `[]` | Les classes dont on lit les attributs |
+| `dry_run` | `false` | Blocks every write, everywhere |
+| `limit` | `1000` | Rows at most per step and per policy |
+| `fields.since` | `last_active_at` | Column of the last sign of life |
+| `fields.warn_stage` | `lifecycle_warn_stage` | How many reminders were sent |
+| `fields.warned_at` | `lifecycle_warned_at` | Date of the last reminder |
+| `fields.disabled_at` | `disabled_at` | Date of the disabling |
+| `fields.anonymised_at` | `anonymised_at` | Date of the anonymisation |
+| `anonymiser.email_domain` | `anonymous.invalid` | Domain of the replacement addresses |
+| `anonymiser.redacted_text` | `[removed]` | Replacement text |
+| `anonymiser.anonymous_name` | `Anonymous` | Replacement name |
+| `anonymiser.pepper` | the application key | Salt of `Strategy::Hash` |
+| `activity.throttle` | `15` | Minutes between two writes of the activity signal |
+| `subjects` | `[]` | The policies written in configuration |
+| `discover` | `[]` | The classes whose attributes are read |
 
-## Ce que ce paquet ne fait pas
+## What this package does not do
 
-- **Ce n'est pas un conseil juridique.** Les durées sont les vôtres : elles dépendent de votre activité et de vos obligations (une facture se garde dix ans, un CV non retenu deux ans). Le paquet applique la durée que vous décidez.
-- **Il ne tient pas votre registre des traitements** et ne répond pas aux demandes d'accès ou de portabilité.
-- **Il ne touche pas à vos sauvegardes** ni à vos journaux : une ligne anonymisée en base reste lisible dans une sauvegarde d'hier. Pensez à la durée de conservation de vos sauvegardes.
-- **Il ne devine pas vos relations** : anonymiser un utilisateur ne vide pas les tables liées. Déclarez une règle par entité, ou faites le ménage dans un écouteur de `SubjectAnonymised`.
+- **This is not legal advice.** The durations are yours: they depend on your activity and your duties (an invoice is kept ten years, a rejected job application two years). The package applies the duration you decide.
+- **It does not hold your record of processing activities** and does not answer access or portability requests.
+- **It does not touch your backups** or your logs: a row anonymised in the database is still readable in yesterday's backup. Think about how long you keep your backups.
+- **It does not guess your relations**: anonymising a user does not empty the linked tables. Write one policy per entity, or clean up in a listener of `SubjectAnonymised`.
 
-## Développement
+## Development
 
 ```bash
 git clone https://github.com/kaveraa/data-lifecycle.git
@@ -407,10 +407,10 @@ composer install
 vendor/bin/phpunit
 ```
 
-Pour proposer une modification, lisez le guide [CONTRIBUTING.md](https://github.com/kaveraa/data-lifecycle/blob/main/CONTRIBUTING.md). Voir le [CHANGELOG](https://github.com/kaveraa/data-lifecycle/blob/main/CHANGELOG.md) pour l'historique des versions.
+To suggest a change, read the [CONTRIBUTING.md](https://github.com/kaveraa/data-lifecycle/blob/main/CONTRIBUTING.md) guide. See the [CHANGELOG](https://github.com/kaveraa/data-lifecycle/blob/main/CHANGELOG.md) for the history of versions.
 
-Pour signaler une faille, ouvrez une [alerte de sécurité privée](https://github.com/kaveraa/data-lifecycle/security/advisories/new) plutôt qu'une issue publique.
+To report a vulnerability, open a [private security advisory](https://github.com/kaveraa/data-lifecycle/security/advisories/new) rather than a public issue.
 
-## Licence
+## License
 
-MIT. Voir [LICENSE](https://github.com/kaveraa/data-lifecycle/blob/main/LICENSE).
+MIT. See [LICENSE](https://github.com/kaveraa/data-lifecycle/blob/main/LICENSE).
