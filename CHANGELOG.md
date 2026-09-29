@@ -4,6 +4,13 @@
 
 **EN** All important changes of the package are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [1.0.2] - 2026-09-29
+
+### Documentation
+
+- **FR** La description du paquet dans `composer.json` est maintenant en anglais.
+  **EN** The package description in `composer.json` is now in English.
+
 ## [1.0.1] - 2026-09-29
 
 ### Documentation
@@ -28,5 +35,6 @@
 - **FR** Huit stratégies d'anonymisation, cinq événements (`SubjectWarned`, `SubjectDisabled`, `SubjectAnonymised`, `SubjectDeleted`, `SubjectReactivated`) et une horloge remplaçable pour les tests.
   **EN** Eight anonymisation strategies, five events (`SubjectWarned`, `SubjectDisabled`, `SubjectAnonymised`, `SubjectDeleted`, `SubjectReactivated`) and a replaceable clock for tests.
 
+[1.0.2]: https://github.com/kaveraa/data-lifecycle/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/kaveraa/data-lifecycle/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/kaveraa/data-lifecycle/releases/tag/v1.0.0
