@@ -1,6 +1,6 @@
 {
     "name": "kaveraa/data-lifecycle",
-    "description": "Conservation et cycle de vie des données personnelles pour Laravel et Symfony/Doctrine : durée de conservation, rappel avant échéance, désactivation avec période de grâce, puis anonymisation ou suppression.",
+    "description": "Keep personal data only as long as needed, for Laravel and Symfony/Doctrine: warn, disable with a grace period, then anonymise or delete",
     "type": "library",
     "license": "MIT",
     "keywords": [
