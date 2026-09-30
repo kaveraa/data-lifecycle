@@ -1,6 +1,6 @@
 # Data Lifecycle
 
-<p align="center"><img src="https://raw.githubusercontent.com/kaveraa/data-lifecycle/main/art/banner.svg" alt="Data Lifecycle" width="100%"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/kaveraa/data-lifecycle/73997d0/art/banner.svg" alt="Data Lifecycle" width="100%"></p>
 
 [![Tests](https://github.com/kaveraa/data-lifecycle/actions/workflows/tests.yml/badge.svg)](https://github.com/kaveraa/data-lifecycle/actions/workflows/tests.yml)
 [![Packagist](https://img.shields.io/packagist/v/kaveraa/data-lifecycle.svg)](https://packagist.org/packages/kaveraa/data-lifecycle)
