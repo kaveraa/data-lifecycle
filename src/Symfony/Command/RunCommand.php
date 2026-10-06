@@ -15,8 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Joue le cycle de vie : prévenir, désactiver, effacer.
- *
  * Plays the lifecycle: warn, disable, erase.
  */
 #[AsCommand(
@@ -27,7 +25,7 @@ final class RunCommand extends Command
 {
     public function __construct(
         private readonly Lifecycle $lifecycle,
-        /** data_lifecycle.dry_run : le mode observation est imposé par la configuration. */
+        /** data_lifecycle.dry_run: the observe mode is forced by the configuration. */
         private readonly bool $alwaysObserve = false,
         private readonly int $defaultLimit = 1000,
     ) {

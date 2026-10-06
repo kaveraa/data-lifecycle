@@ -9,8 +9,8 @@ use Kaveraa\DataLifecycle\Step;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\Ping;
 
 /**
- * Une règle sans rappel ni désactivation fonctionne sur une table qui n'a que
- * la colonne du dernier signe de vie. Le paquet n'impose aucun schéma.
+ * A policy without reminder or disable step works on a table that only has
+ * the column of the last sign of life. The package forces no schema.
  */
 final class MinimalSchemaTest extends TestCase
 {
@@ -19,8 +19,8 @@ final class MinimalSchemaTest extends TestCase
         $old = Ping::query()->create(['last_active_at' => '2024-01-01 00:00:00']);
         $fresh = Ping::query()->create(['last_active_at' => '2025-06-01 00:00:00']);
 
-        // La table n'a ni compteur de rappels, ni date de désactivation, ni
-        // date d'anonymisation : la moindre colonne en trop ferait échouer SQLite.
+        // The table has no reminder counter, no disable date and no
+        // anonymisation date: any extra column would make SQLite fail.
         $this->moveTo('2025-06-15 09:00:00');
 
         $report = $this->lifecycle()->runFor(Ping::class);

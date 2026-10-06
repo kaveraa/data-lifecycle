@@ -5,36 +5,34 @@ declare(strict_types=1);
 namespace Kaveraa\DataLifecycle;
 
 /**
- * Comment remplacer la valeur d'un champ au moment de l'anonymisation.
- *
  * How to replace the value of a field when anonymising.
  */
 enum Strategy: string
 {
-    /** Choisit d'après le nom du champ : "mail" -> Email, sinon Redact. */
+    /** Chooses from the field name: "mail" -> Email, otherwise Redact. */
     case Auto = 'auto';
 
-    /** Met null. Le champ doit accepter null. */
+    /** Sets null. The field must accept null. */
     case Nullify = 'nullify';
 
-    /** Met un texte fixe, "[removed]" par défaut. */
+    /** Sets a fixed text, "[removed]" by default. */
     case Redact = 'redact';
 
-    /** Met une chaîne vide. */
+    /** Sets an empty string. */
     case EmptyText = 'empty';
 
-    /** Met "Anonymous". */
+    /** Sets "Anonymous". */
     case Text = 'text';
 
-    /** Met une adresse unique et invalide, par exemple anonymous-42@anonymous.invalid. */
+    /** Sets a unique and invalid address, for example anonymous-42@anonymous.invalid. */
     case Email = 'email';
 
-    /** Remplace par une empreinte : la valeur ne revient pas, mais deux valeurs égales le restent. */
+    /** Replaces with a hash: the value cannot be recovered, but two equal values stay equal. */
     case Hash = 'hash';
 
-    /** Met zéro. */
+    /** Sets zero. */
     case Zero = 'zero';
 
-    /** Garde seulement l'année d'une date (1er janvier). */
+    /** Keeps only the year of a date (1st of January). */
     case YearOnly = 'year_only';
 }

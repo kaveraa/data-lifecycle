@@ -12,8 +12,6 @@ use Kaveraa\DataLifecycle\RunOptions;
 use Kaveraa\DataLifecycle\Step;
 
 /**
- * Dit ce qui se passerait, sans rien écrire.
- *
  * Says what would happen, without writing anything.
  */
 final class ReportCommand extends Command
@@ -67,7 +65,7 @@ final class ReportCommand extends Command
     }
 
     /**
-     * Null quand la valeur donnée n'a pas de sens : le message est déjà affiché.
+     * Null when the given value makes no sense: the message is already shown.
      */
     private function limit(): ?int
     {

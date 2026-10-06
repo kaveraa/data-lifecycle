@@ -13,8 +13,8 @@ use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\Ticket;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\User;
 
 /**
- * Les événements du paquet passent par le répartiteur de Laravel, et se taisent
- * en mode observation.
+ * The package events go through the Laravel dispatcher, and stay silent
+ * in observe mode.
  */
 final class EventsTest extends TestCase
 {
@@ -33,7 +33,7 @@ final class EventsTest extends TestCase
 
         $ticket = Ticket::query()->create(['last_active_at' => '2024-01-01 00:00:00']);
 
-        // La forme sans nom d'événement, comme dans le README.
+        // The form without an event name, as in the README.
         $warned = null;
         Event::listen(static function (SubjectWarned $event) use (&$warned): void {
             $warned = $event;

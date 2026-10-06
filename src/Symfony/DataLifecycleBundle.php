@@ -25,17 +25,14 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 /**
- * Bundle Symfony : la configuration data_lifecycle, les services du paquet, les
- * deux commandes console et le signal d'activité.
- *
  * Symfony bundle: the data_lifecycle configuration, the package services, the
  * two console commands and the activity signal.
  *
- * Activation dans config/bundles.php :
+ * Enable it in config/bundles.php:
  *
  *     Kaveraa\DataLifecycle\Symfony\DataLifecycleBundle::class => ['all' => true],
  *
- * Configuration (config/packages/data_lifecycle.yaml) :
+ * Configuration (config/packages/data_lifecycle.yaml):
  *
  *     data_lifecycle:
  *         limit: 1000
@@ -120,9 +117,9 @@ final class DataLifecycleBundle extends AbstractBundle
     }
 
     /**
-     * DoctrineBundle est-il installé ? Pendant le chargement des extensions, le
-     * conteneur reçu ne connaît pas les autres extensions : on regarde la liste
-     * des bundles du noyau.
+     * Is DoctrineBundle installed? While the extensions load, the container
+     * we receive does not know the other extensions: we look at the list of
+     * bundles of the kernel.
      */
     private static function hasDoctrine(ContainerBuilder $builder): bool
     {
@@ -168,8 +165,8 @@ final class DataLifecycleBundle extends AbstractBundle
                 $config['anonymiser']['pepper'],
             ]);
 
-        // Horloge du paquet. L'alias Psr\Clock\ClockInterface n'est posé que si
-        // l'application n'en a pas déjà un (voir OptionalAliasPass).
+        // Clock of the package. The Psr\Clock\ClockInterface alias is set only if
+        // the application does not already have one (see OptionalAliasPass).
         $services->set('data_lifecycle.clock', SystemClock::class);
 
         $services->set(PolicyRegistry::class)
@@ -177,8 +174,8 @@ final class DataLifecycleBundle extends AbstractBundle
             ->args([service(Fields::class), $config['discover'], $config['subjects']]);
 
         if (!self::hasDoctrine($builder)) {
-            // Sans DoctrineBundle il n'y a pas de pilote : les règles restent
-            // lisibles, le reste attend l'ORM.
+            // Without DoctrineBundle there is no driver: the policies can still
+            // be read, the rest waits for the ORM.
             return;
         }
 

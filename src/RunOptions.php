@@ -7,8 +7,6 @@ namespace Kaveraa\DataLifecycle;
 use Kaveraa\DataLifecycle\Exception\InvalidOption;
 
 /**
- * Comment lancer une exécution.
- *
  * How to launch a run.
  */
 final class RunOptions
@@ -17,15 +15,15 @@ final class RunOptions
     public readonly array $steps;
 
     /**
-     * @param list<Step> $steps étapes à jouer / steps to play
+     * @param list<Step> $steps steps to play
      */
     public function __construct(
-        /** Ne rien écrire : seulement dire ce qui se passerait. */
+        /** Write nothing: only say what would happen. */
         public readonly bool $dryRun = false,
-        /** Nombre de lignes maximum par étape et par règle. */
+        /** Maximum number of rows per step and per policy. */
         public readonly int $limit = 1000,
         array $steps = [],
-        /** Garder l'identifiant des premières lignes dans le rapport. */
+        /** Keep the id of the first rows in the report. */
         public readonly int $samples = 5,
     ) {
         if ($limit < 1) {

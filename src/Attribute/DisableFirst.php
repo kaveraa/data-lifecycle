@@ -7,9 +7,6 @@ namespace Kaveraa\DataLifecycle\Attribute;
 use Attribute;
 
 /**
- * Désactiver d'abord, effacer seulement après ce délai de grâce.
- * Pendant la grâce, la personne peut revenir et tout repart à zéro.
- *
  * Disable first, erase only after this grace period.
  * During the grace period the person can come back and everything is reset.
  *

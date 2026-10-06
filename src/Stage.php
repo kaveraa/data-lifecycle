@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kaveraa\DataLifecycle;
 
 /**
- * Où en est une ligne dans son cycle de vie.
- *
  * Where a record stands in its lifecycle.
  */
 enum Stage: string

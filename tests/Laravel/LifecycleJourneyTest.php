@@ -10,8 +10,8 @@ use Kaveraa\DataLifecycle\Step;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\User;
 
 /**
- * Le parcours complet, mois après mois : actif, rappel 1, rappel 2,
- * désactivation, anonymisation.
+ * The full journey, month after month: active, reminder 1, reminder 2,
+ * disable, anonymisation.
  */
 final class LifecycleJourneyTest extends TestCase
 {
@@ -23,7 +23,7 @@ final class LifecycleJourneyTest extends TestCase
             'last_active_at' => '2024-01-01 00:00:00',
         ]);
 
-        // Trois ans à courir : rien ne bouge.
+        // Three years to go: nothing moves.
         $this->moveTo('2026-06-01 09:00:00');
         $report = $this->lifecycle()->run();
 
@@ -31,7 +31,7 @@ final class LifecycleJourneyTest extends TestCase
         self::assertSame(Stage::Active, $user->fresh()->lifecycleStage());
         self::assertSame('2027-01-01', $user->fresh()->lifecycleDueAt()?->format('Y-m-d'));
 
-        // Trente jours avant l'échéance : premier rappel.
+        // Thirty days before the deadline: first reminder.
         $this->moveTo('2026-12-05 09:00:00');
         $report = $this->lifecycle()->run();
 
@@ -44,18 +44,18 @@ final class LifecycleJourneyTest extends TestCase
         self::assertNull($row->disabled_at);
         self::assertSame(Stage::Warned, $user->fresh()->lifecycleStage());
 
-        // Le même jour, une seconde fois : le rappel ne repart pas.
+        // The same day, a second time: the reminder is not sent again.
         $report = $this->lifecycle()->run();
         self::assertSame(0, $report->countFor(User::class, Step::Warn));
 
-        // Sept jours avant l'échéance : second rappel.
+        // Seven days before the deadline: second reminder.
         $this->moveTo('2026-12-28 09:00:00');
         $report = $this->lifecycle()->run();
 
         self::assertSame(1, $report->countFor(User::class, Step::Warn));
         self::assertSame(2, (int) DB::table('users')->find($user->id)->lifecycle_warn_stage);
 
-        // Échéance atteinte : désactivation, et surtout pas d'effacement.
+        // Deadline reached: disable, and above all no erasure.
         $this->moveTo('2027-01-02 09:00:00');
         $report = $this->lifecycle()->run();
 
@@ -68,7 +68,7 @@ final class LifecycleJourneyTest extends TestCase
         self::assertSame('camille@example.test', $row->email);
         self::assertSame(Stage::Disabled, $user->fresh()->lifecycleStage());
 
-        // Trente jours de grâce passés : anonymisation.
+        // Thirty days of grace passed: anonymisation.
         $this->moveTo('2027-02-05 09:00:00');
         $report = $this->lifecycle()->run();
 
@@ -80,7 +80,7 @@ final class LifecycleJourneyTest extends TestCase
         self::assertNotNull($row->anonymised_at);
         self::assertSame(Stage::Erased, $user->fresh()->lifecycleStage());
 
-        // La ligne est encore là, mais elle ne revient plus jamais.
+        // The row is still there, but it never comes back.
         self::assertSame(1, User::query()->count());
         self::assertTrue($this->lifecycle()->run()->isEmpty());
         self::assertFalse($this->lifecycle()->reactivate($user->fresh()));

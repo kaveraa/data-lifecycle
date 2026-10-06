@@ -16,9 +16,6 @@ use Psr\Clock\ClockInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Le signal d'activité : met à jour la date du dernier signe de vie, au plus une
- * fois toutes les N minutes. Une écriture à chaque requête serait inacceptable.
- *
  * The activity signal: updates the last sign of life, at most once every N
  * minutes. Writing on every request would be unacceptable.
  */
@@ -40,11 +37,11 @@ final class TrackActivity
     }
 
     /**
-     * Personne n'est connecté : on ne fait rien du tout.
+     * Nobody is logged in: we do nothing at all.
      */
     private function touch(mixed $user): void
     {
-        // Une fenetre a zero eteint le signal : c'est l'interrupteur du reglage.
+        // A window of zero turns the signal off: it is the switch of the setting.
         if ($this->throttle <= 0) {
             return;
         }
@@ -56,7 +53,7 @@ final class TrackActivity
         $field = $this->policies->for($user)?->fields->since ?? $this->fields->since;
         $now = $this->clock->now();
 
-        // La valeur est déjà chargée : on décide sans aller voir la base.
+        // The value is already loaded: we decide without querying the database.
         if (!$this->isStale($user->getAttribute($field), $now)) {
             return;
         }
@@ -65,7 +62,7 @@ final class TrackActivity
             ->where($user->getKeyName(), '=', $user->getKey())
             ->update([$field => $now]);
 
-        // Pas de save() : updated_at ne doit pas bouger.
+        // No save(): updated_at must not change.
         $user->forceFill([$field => $now]);
         $user->syncOriginal();
     }

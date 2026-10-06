@@ -22,8 +22,6 @@ use Kaveraa\DataLifecycle\SystemClock;
 use Psr\Clock\ClockInterface;
 
 /**
- * Branche le paquet sur Laravel : configuration, services, commandes.
- *
  * Wires the package into Laravel: configuration, services, commands.
  */
 final class DataLifecycleServiceProvider extends ServiceProvider
@@ -51,7 +49,7 @@ final class DataLifecycleServiceProvider extends ServiceProvider
             );
         });
 
-        // Une horloge déjà déclarée par l'application garde la main.
+        // A clock already declared by the application keeps priority.
         $this->app->singletonIf(ClockInterface::class, SystemClock::class);
 
         $this->app->singleton(EventBridge::class, static fn (Application $app): EventBridge => new EventBridge($app));
@@ -100,8 +98,8 @@ final class DataLifecycleServiceProvider extends ServiceProvider
     }
 
     /**
-     * D'abord les attributs PHP, ensuite la configuration : ce qui est écrit en
-     * clair dans config/data-lifecycle.php l'emporte.
+     * First the PHP attributes, then the configuration: what is written in
+     * plain config in config/data-lifecycle.php wins.
      */
     private function registry(Application $app): PolicyRegistry
     {
@@ -118,7 +116,7 @@ final class DataLifecycleServiceProvider extends ServiceProvider
 
             $policy = $factory->fromAttributes($class);
 
-            // Une classe sans #[KeepFor] n'est pas une erreur : on passe.
+            // A class without #[KeepFor] is not an error: we skip it.
             if ($policy !== null) {
                 $registry->add($policy);
             }

@@ -9,9 +9,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 
 /**
- * Une ligne concernée par une règle, vue par le paquet : son identifiant,
- * l'objet d'origine, et de quoi lire un champ quel que soit l'ORM.
- *
  * One row covered by a policy, as seen by the package: its id, the original
  * object, and a way to read a field whatever the ORM is.
  */

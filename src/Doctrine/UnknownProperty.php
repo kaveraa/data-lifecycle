@@ -8,14 +8,12 @@ use InvalidArgumentException;
 use Kaveraa\DataLifecycle\Exception\DataLifecycleException;
 
 /**
- * Le nom d'un champ de la règle ne correspond à aucune propriété de l'entité.
- *
  * A field name of the policy matches no property of the entity.
  */
 final class UnknownProperty extends InvalidArgumentException implements DataLifecycleException
 {
     /**
-     * @param list<string> $tried noms de propriétés essayés / property names tried
+     * @param list<string> $tried property names tried
      */
     public static function on(string $entity, string $role, string $field, array $tried): self
     {

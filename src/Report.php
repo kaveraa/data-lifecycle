@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kaveraa\DataLifecycle;
 
 /**
- * Ce qui a été fait, ou ce qui serait fait en mode observation.
- *
  * What was done, or what would be done in observe mode.
  */
 final class Report

@@ -13,8 +13,6 @@ use Kaveraa\DataLifecycle\Exception\InvalidPolicy;
 use ReflectionClass;
 
 /**
- * Lit les attributs d'une classe et en fait une règle de conservation.
- *
  * Reads the attributes of a class and turns them into a retention policy.
  */
 final class PolicyFactory
@@ -24,7 +22,7 @@ final class PolicyFactory
     }
 
     /**
-     * Renvoie null si la classe ne porte pas #[KeepFor].
+     * Returns null if the class does not have #[KeepFor].
      */
     public function fromAttributes(string $subject): ?Policy
     {
