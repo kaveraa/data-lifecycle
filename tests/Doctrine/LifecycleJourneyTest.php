@@ -9,7 +9,7 @@ use Kaveraa\DataLifecycle\Step;
 use Kaveraa\DataLifecycle\Tests\Doctrine\Entity\Member;
 
 /**
- * Le parcours d'une personne inactive, mois après mois.
+ * The journey of an inactive person, month after month.
  */
 final class LifecycleJourneyTest extends DoctrineTestCase
 {
@@ -21,14 +21,14 @@ final class LifecycleJourneyTest extends DoctrineTestCase
         $id = (int) $member->id;
         $lifecycle = $this->lifecycleOf(Member::class);
 
-        // Trois ans de conservation : à six mois de l'échéance, rien ne bouge.
+        // Three years of retention: six months before the deadline, nothing moves.
         $this->clock->moveTo('2022-06-01 12:00:00');
 
         self::assertTrue($lifecycle->run()->isEmpty());
         self::assertSame(Stage::Active, $lifecycle->stageOf($this->reload(Member::class, $id)));
         self::assertSame([], $this->events->names());
 
-        // Premier rappel : trente jours avant l'échéance du 1er janvier 2023.
+        // First reminder: thirty days before the deadline of 1 January 2023.
         $this->clock->moveTo('2022-12-05 12:00:00');
 
         self::assertSame(1, $lifecycle->run()->countFor(Member::class, Step::Warn));
@@ -42,18 +42,18 @@ final class LifecycleJourneyTest extends DoctrineTestCase
         self::assertSame(Stage::Warned, $lifecycle->stageOf($fresh));
         self::assertSame(['SubjectWarned'], $this->events->names());
 
-        // Le lendemain, le premier rappel ne repart pas.
+        // The next day, the first reminder is not sent again.
         $this->clock->moveTo('2022-12-06 12:00:00');
 
         self::assertTrue($lifecycle->run()->isEmpty());
 
-        // Deuxième rappel : sept jours avant l'échéance.
+        // Second reminder: seven days before the deadline.
         $this->clock->moveTo('2022-12-28 12:00:00');
 
         self::assertSame(1, $lifecycle->run()->countFor(Member::class, Step::Warn));
         self::assertSame(2, $this->reload(Member::class, $id)->lifecycleWarnStage);
 
-        // Échéance passée : désactivation, et rien d'autre le même jour.
+        // Deadline passed: disable, and nothing else on the same day.
         $this->clock->moveTo('2023-01-02 12:00:00');
 
         $report = $lifecycle->run();
@@ -68,13 +68,13 @@ final class LifecycleJourneyTest extends DoctrineTestCase
         self::assertSame('alice@example.test', $fresh->email);
         self::assertSame(Stage::Disabled, $lifecycle->stageOf($fresh));
 
-        // Pendant la grâce de trente jours, la ligne reste intacte.
+        // During the thirty days of grace, the row stays untouched.
         $this->clock->moveTo('2023-01-20 12:00:00');
 
         self::assertTrue($lifecycle->run()->isEmpty());
         self::assertNull($this->reload(Member::class, $id)->anonymisedAt);
 
-        // Grâce écoulée : anonymisation.
+        // Grace over: anonymisation.
         $this->clock->moveTo('2023-02-05 12:00:00');
 
         self::assertSame(1, $lifecycle->run()->countFor(Member::class, Step::Erase));
@@ -91,7 +91,7 @@ final class LifecycleJourneyTest extends DoctrineTestCase
             $this->events->names(),
         );
 
-        // Une ligne anonymisée ne repasse jamais dans le cycle.
+        // An anonymised row never goes through the cycle again.
         $this->clock->moveTo('2024-01-01 12:00:00');
 
         self::assertTrue($lifecycle->run()->isEmpty());

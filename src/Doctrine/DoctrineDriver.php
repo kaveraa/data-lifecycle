@@ -17,18 +17,15 @@ use Kaveraa\DataLifecycle\Subject;
 use ReflectionMethod;
 
 /**
- * Le pilote Doctrine ORM : construit les requêtes DQL de chaque étape et écrit
- * les dates du cycle de vie sur les entités.
- *
  * The Doctrine ORM driver: builds the DQL query of every step and writes the
  * lifecycle dates on the entities.
  *
- * Seules les propriétés dont la règle a besoin sont utilisées : une entité qui
- * n'a que son dernier signe de vie fonctionne avec une règle simple.
+ * Only the properties the policy needs are used: an entity that only has its
+ * last sign of life works with a simple policy.
  *
- * L'écriture est suivie d'un flush par action (une action = une ligne, parfois
- * plusieurs colonnes). C'est un UPDATE par ligne traitée : sûr et lisible, sans
- * dépendre de la façon dont l'appelant parcourt les candidats.
+ * Each write is followed by a flush per action (one action = one row, sometimes
+ * several columns). That is one UPDATE per handled row: safe and readable, and it
+ * does not depend on how the caller goes through the candidates.
  */
 final class DoctrineDriver implements Driver
 {
@@ -69,7 +66,7 @@ final class DoctrineDriver implements Driver
 
         $this->write($meta, $subject->entity, $this->of($meta, $policy->fields->warnStage, 'warn_stage'), $warnIndex + 1);
 
-        // Date du dernier rappel : informative, écrite seulement si la propriété existe.
+        // Date of the last reminder: for information only, written only if the property exists.
         $this->writeIfAny($meta, $subject->entity, $policy->fields->warnedAt, $at);
 
         $this->entities->flush();
@@ -102,7 +99,7 @@ final class DoctrineDriver implements Driver
 
     public function delete(Policy $policy, Subject $subject): void
     {
-        // Doctrine ne connaît pas le soft delete : forceDelete n'a rien à ignorer ici.
+        // Doctrine has no soft delete: forceDelete has nothing to skip here.
         $this->entities->remove($subject->entity);
         $this->entities->flush();
     }
@@ -111,11 +108,11 @@ final class DoctrineDriver implements Driver
     {
         $meta = $this->meta($policy);
 
-        // Le retour est un signe de vie : sans cette date, la ligne serait
-        // redésactivée dès l'exécution suivante.
+        // Coming back is a sign of life: without this date, the row would be
+        // disabled again on the next run.
         $this->write($meta, $subject->entity, $this->of($meta, $policy->fields->since, 'since'), $at);
 
-        // Tolérant : une entité sans rappels ni désactivation n'a pas ces propriétés.
+        // Tolerant: an entity without reminders or disable step does not have these properties.
         $this->writeIfAny($meta, $subject->entity, $policy->fields->warnStage, 0);
         $this->writeIfAny($meta, $subject->entity, $policy->fields->warnedAt, null);
         $this->writeIfAny($meta, $subject->entity, $policy->fields->disabledAt, null);
@@ -144,7 +141,7 @@ final class DoctrineDriver implements Driver
     }
 
     /**
-     * Rappel numéro $warnIndex pas encore envoyé, et ligne ni désactivée ni effacée.
+     * Reminder number $warnIndex not sent yet, and row neither disabled nor erased.
      *
      * @param ClassMetadata<object> $meta
      */
@@ -177,8 +174,8 @@ final class DoctrineDriver implements Driver
     }
 
     /**
-     * Avec étape de désactivation on compte depuis la désactivation, sinon
-     * depuis le dernier signe de vie.
+     * With a disable step we count from the disable date, otherwise
+     * from the last sign of life.
      *
      * @param ClassMetadata<object> $meta
      */
@@ -218,7 +215,7 @@ final class DoctrineDriver implements Driver
     }
 
     /**
-     * Écrit seulement si l'entité a la propriété.
+     * Writes only if the entity has the property.
      *
      * @param ClassMetadata<object> $meta
      */
@@ -232,7 +229,7 @@ final class DoctrineDriver implements Driver
     }
 
     /**
-     * Le setter s'il existe et accepte la valeur, sinon les métadonnées Doctrine.
+     * The setter if it exists and accepts the value, otherwise the Doctrine metadata.
      *
      * @param ClassMetadata<object> $meta
      */
@@ -258,7 +255,7 @@ final class DoctrineDriver implements Driver
             return false;
         }
 
-        // Un setter non nullable ne peut pas recevoir la remise à zéro d'une date.
+        // A non-nullable setter cannot receive the reset of a date to null.
         return $value !== null || $first->getType() === null || $first->allowsNull();
     }
 

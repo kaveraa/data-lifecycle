@@ -9,9 +9,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Fait passer les événements du paquet par le répartiteur de Laravel, pour que
- * Event::listen(SubjectWarned::class, ...) fonctionne normalement.
- *
  * Sends the package events through the Laravel dispatcher, so that
  * Event::listen(SubjectWarned::class, ...) works as usual.
  */
@@ -23,7 +20,7 @@ final class EventBridge implements EventDispatcherInterface
 
     public function dispatch(object $event): object
     {
-        // Résolu à chaque envoi : Event::fake() remplace le répartiteur en cours de route.
+        // Resolved on each dispatch: Event::fake() swaps the dispatcher along the way.
         $this->container->make(Dispatcher::class)->dispatch($event);
 
         return $event;

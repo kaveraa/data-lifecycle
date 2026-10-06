@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Kaveraa\DataLifecycle\Symfony;
 
 /**
- * La personne connectée, lue dans le stockage de jeton de Symfony Security.
- *
  * The connected person, read from the Symfony Security token storage.
  *
- * Le jeton est lu sans dépendre du composant security : le paquet marche aussi
- * dans une application qui ne l'installe pas, et renvoie alors toujours null.
+ * The token is read without depending on the security component: the package
+ * also works in an application that does not install it, and then always returns null.
  */
 final class CurrentUser
 {

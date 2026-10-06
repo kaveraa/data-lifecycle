@@ -9,8 +9,6 @@ use Kaveraa\DataLifecycle\Policy;
 use Kaveraa\DataLifecycle\Subject;
 
 /**
- * La personne est revenue : le compte repart, le compteur aussi.
- *
  * The person came back: the account is live again, and the clock restarts.
  */
 final class SubjectReactivated

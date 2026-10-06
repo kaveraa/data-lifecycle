@@ -9,8 +9,8 @@ use Kaveraa\DataLifecycle\PolicyRegistry;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\Ticket;
 
 /**
- * Une classe déclarée à la fois par attribut et par configuration : la
- * configuration l'emporte.
+ * A class declared both by attribute and by configuration: the
+ * configuration wins.
  */
 final class ConfigWinsOverAttributesTest extends TestCase
 {

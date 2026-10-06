@@ -31,7 +31,7 @@ final class DataLifecycleBundleTest extends BundleTestCase
         return [
             'limit' => 50,
             'subjects' => [
-                // La configuration gagne sur les attributs de la classe (3 ans -> 2 ans).
+                // The configuration wins over the class attributes (3 years -> 2 years).
                 Member::class => [
                     'keep_for' => '2 years',
                     'warn_before' => ['30 days'],
@@ -59,7 +59,7 @@ final class DataLifecycleBundleTest extends BundleTestCase
         self::assertSame(['email' => Strategy::Email, 'name' => Strategy::Text], $member->anonymise);
         self::assertSame('last_active_at', $member->fields->since);
 
-        // Lues sur les attributs, sans une ligne de configuration.
+        // Read from the attributes, without a single line of configuration.
         $session = $registry->get(Session::class);
 
         self::assertSame('30 days', (string) $session->keepFor);
@@ -90,7 +90,7 @@ final class DataLifecycleBundleTest extends BundleTestCase
         self::assertSame('lifecycle_warned_at', $fields->warnedAt);
         self::assertSame('anonymised_at', $fields->anonymisedAt);
 
-        // Les événements du paquet s'écoutent avec le répartiteur de Symfony.
+        // The package events can be listened to with the Symfony dispatcher.
         $events = $container->get(EventDispatcherInterface::class);
 
         self::assertInstanceOf(SymfonyEventDispatcherInterface::class, $events);

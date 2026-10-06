@@ -12,7 +12,7 @@ use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\Ticket;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\User;
 
 /**
- * Le registre se remplit avec les attributs puis avec la configuration.
+ * The registry is filled with the attributes, then with the configuration.
  */
 final class RegistryTest extends TestCase
 {
@@ -25,20 +25,20 @@ final class RegistryTest extends TestCase
         self::assertTrue($registry->has(Ping::class));
         self::assertTrue($registry->has(Ticket::class));
 
-        // Ticket vient de ses attributs PHP.
+        // Ticket comes from its PHP attributes.
         $ticket = $registry->get(Ticket::class);
         self::assertSame('1 year', (string) $ticket->keepFor);
         self::assertSame(Ending::Delete, $ticket->ending);
         self::assertTrue($ticket->forceDelete);
         self::assertFalse($ticket->hasDisableStep());
 
-        // Member est dans "discover" sans porter #[KeepFor] : ignoré sans bruit,
-        // puis déclaré par la configuration.
+        // Member is in "discover" without #[KeepFor]: skipped silently,
+        // then declared by the configuration.
         $member = $registry->get(Member::class);
         self::assertSame('2 years', (string) $member->keepFor);
         self::assertSame(Ending::Anonymise, $member->ending);
 
-        // Les rappels sont rangés du plus lointain au plus proche.
+        // The reminders are sorted from the farthest to the closest.
         $user = $registry->get(User::class);
         self::assertSame(['30 days', '7 days'], array_map(strval(...), $user->warnBefore));
         self::assertSame('last_active_at', $user->fields->since);

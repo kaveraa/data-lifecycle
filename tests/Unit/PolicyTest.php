@@ -33,7 +33,7 @@ final class PolicyTest extends TestCase
     {
         $policy = $this->policy(warnBefore: ['30 days']);
 
-        // Le 5 decembre 2025, on previent les lignes qui arrivent a echeance dans 30 jours ou moins.
+        // On 5 December 2025, we warn the rows that reach their deadline in 30 days or less.
         self::assertSame('2023-01-04', $policy->warnCutoff(0, new DateTimeImmutable('2025-12-05'))->format('Y-m-d'));
         self::assertNull($policy->warnCutoff(1, new DateTimeImmutable('2025-12-05')));
     }

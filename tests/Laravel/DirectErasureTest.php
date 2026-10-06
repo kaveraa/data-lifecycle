@@ -10,8 +10,8 @@ use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\Member;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\Ticket;
 
 /**
- * Deux règles sans étape de désactivation : anonymisation directe d'un côté,
- * suppression définitive de l'autre.
+ * Two policies without a disable step: direct anonymisation on one side,
+ * permanent deletion on the other.
  */
 final class DirectErasureTest extends TestCase
 {
@@ -22,11 +22,11 @@ final class DirectErasureTest extends TestCase
             'last_active_at' => '2024-01-01 00:00:00',
         ]);
 
-        // Un an avant l'échéance : rien.
+        // One year before the deadline: nothing.
         $this->moveTo('2025-02-01 09:00:00');
         self::assertSame(0, $this->lifecycle()->runFor(Member::class)->total());
 
-        // Deux ans passés : anonymisation, sans passer par la désactivation.
+        // Two years passed: anonymisation, without going through the disable step.
         $this->moveTo('2026-02-01 09:00:00');
         $report = $this->lifecycle()->runFor(Member::class);
 
@@ -37,7 +37,7 @@ final class DirectErasureTest extends TestCase
         self::assertSame('anonymous-' . $member->id . '@anonymous.invalid', $row->email);
         self::assertNotNull($row->anonymised_at);
 
-        // Une seconde fois : la ligne n'est plus candidate.
+        // A second time: the row is no longer a candidate.
         self::assertSame(0, $this->lifecycle()->runFor(Member::class)->total());
     }
 
@@ -56,7 +56,7 @@ final class DirectErasureTest extends TestCase
 
         self::assertSame(1, $report->countFor(Ticket::class, Step::Erase));
 
-        // force: true, donc la ligne part vraiment, corbeille comprise.
+        // force: true, so the row really goes away, trash included.
         self::assertSame(0, Ticket::query()->withTrashed()->count());
         self::assertNull(DB::table('tickets')->find($ticket->id));
     }

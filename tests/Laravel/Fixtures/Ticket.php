@@ -10,7 +10,7 @@ use Kaveraa\DataLifecycle\Attribute\KeepFor;
 use Kaveraa\DataLifecycle\Attribute\ThenDelete;
 
 /**
- * Règle lue sur les attributs PHP, fin par suppression définitive.
+ * Policy read from the PHP attributes, ending with a permanent deletion.
  */
 #[KeepFor('1 year')]
 #[ThenDelete(force: true)]

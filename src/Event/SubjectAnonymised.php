@@ -9,8 +9,6 @@ use Kaveraa\DataLifecycle\Policy;
 use Kaveraa\DataLifecycle\Subject;
 
 /**
- * La ligne reste, mais les données personnelles sont parties.
- *
  * The row stays, but the personal data is gone.
  */
 final class SubjectAnonymised

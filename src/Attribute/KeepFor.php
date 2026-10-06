@@ -7,8 +7,6 @@ namespace Kaveraa\DataLifecycle\Attribute;
 use Attribute;
 
 /**
- * Combien de temps la ligne est gardée après son dernier signe de vie.
- *
  * How long the row is kept after its last sign of life.
  *
  *     #[KeepFor('3 years')]

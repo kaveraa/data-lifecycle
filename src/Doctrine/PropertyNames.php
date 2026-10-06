@@ -7,19 +7,16 @@ namespace Kaveraa\DataLifecycle\Doctrine;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
- * Traduit les noms de champs de la règle (pensés pour des colonnes SQL, donc en
- * snake_case) en noms de propriétés PHP, seuls compris par le DQL.
- *
  * Translates the field names of a policy (meant for SQL columns, so written in
  * snake_case) into PHP property names, the only ones DQL understands.
  */
 final class PropertyNames
 {
-    /** @var array<string, string|null> classe::champ -> propriété, pour ne chercher qu'une fois */
+    /** @var array<string, string|null> class::field -> property, so we search only once */
     private array $known = [];
 
     /**
-     * Le nom de la propriété, ou une exception qui dit ce qui manque et où.
+     * The property name, or an exception that says what is missing and where.
      *
      * @param ClassMetadata<object> $meta
      */
@@ -30,8 +27,8 @@ final class PropertyNames
     }
 
     /**
-     * Le nom de la propriété, ou null si l'entité n'en a pas. Sert aux champs
-     * facultatifs : on n'impose pas un schéma, chacun n'ajoute que ce dont il a besoin.
+     * The property name, or null if the entity does not have it. Used for optional
+     * fields: we do not force a schema, everyone adds only what they need.
      *
      * @param ClassMetadata<object> $meta
      */
@@ -55,7 +52,7 @@ final class PropertyNames
     }
 
     /**
-     * Le nom tel quel, puis sa version camelCase : "last_active_at" -> "lastActiveAt".
+     * The name as is, then its camelCase form: "last_active_at" -> "lastActiveAt".
      *
      * @return list<string>
      */

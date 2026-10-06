@@ -4,49 +4,49 @@ declare(strict_types=1);
 
 return [
 
-    // Mode observation. Rien n'est écrit, on dit seulement ce qui se passerait.
-    // Utile pour une première mise en route en production.
+    // Observe mode. Nothing is written, we only say what would happen.
+    // Useful for a first start in production.
     'dry_run' => (bool) env('DATA_LIFECYCLE_DRY_RUN', false),
 
-    // Nombre maximum de lignes traitées par étape et par règle, à chaque passage.
+    // Maximum number of rows handled per step and per policy, on each run.
     'limit' => (int) env('DATA_LIFECYCLE_LIMIT', 1000),
 
-    // Les colonnes lues et écrites par le paquet. Seules celles dont vos règles
-    // ont besoin doivent exister : sans rappel, pas de colonne de comptage ;
-    // sans anonymisation, pas de date d'anonymisation.
+    // The columns the package reads and writes. Only the ones your policies
+    // need have to exist: without reminders, no counter column;
+    // without anonymisation, no anonymisation date.
     'fields' => [
-        // Date du dernier signe de vie. C'est la seule colonne toujours requise.
+        // Date of the last sign of life. This is the only column always required.
         'since' => 'last_active_at',
-        // Nombre de rappels déjà envoyés. Requise seulement avec des rappels.
+        // Number of reminders already sent. Required only with reminders.
         'warn_stage' => 'lifecycle_warn_stage',
-        // Date du dernier rappel envoyé. Informative.
+        // Date of the last reminder sent. For information only.
         'warned_at' => 'lifecycle_warned_at',
-        // Date de désactivation. Requise seulement avec une période de grâce.
+        // Disable date. Required only with a grace period.
         'disabled_at' => 'disabled_at',
-        // Date d'anonymisation. Requise seulement si la fin est une anonymisation.
+        // Anonymisation date. Required only if the ending is an anonymisation.
         'anonymised_at' => 'anonymised_at',
     ],
 
-    // Les valeurs de remplacement au moment de l'anonymisation.
+    // The replacement values used when anonymising.
     'anonymiser' => [
-        // Domaine des adresses de remplacement. Doit rester invalide.
+        // Domain of the replacement email addresses. It must stay invalid.
         'email_domain' => 'anonymous.invalid',
-        // Texte mis à la place d'une donnée effacée.
+        // Text put in place of an erased value.
         'redacted_text' => '[removed]',
-        // Nom mis à la place d'un nom de personne.
+        // Name put in place of a person's name.
         'anonymous_name' => 'Anonymous',
-        // Sel des empreintes. Change de sel = empreintes différentes.
+        // Salt of the hashes. A different salt = different hashes.
         'pepper' => env('APP_KEY', ''),
     ],
 
-    // Signal d'activité. Nombre de minutes entre deux écritures de la date du
-    // dernier signe de vie. Une écriture par requête serait trop coûteuse.
-    // Mettre 0 éteint complètement le signal : plus aucune écriture.
+    // Activity signal. Number of minutes between two writes of the date of the
+    // last sign of life. One write per request would cost too much.
+    // Set 0 to turn the signal off completely: no write at all.
     'activity' => [
         'throttle' => 15,
     ],
 
-    // Les règles déclarées ici, en clair. Elles l'emportent sur les attributs.
+    // The policies declared here, in plain config. They win over the attributes.
     'subjects' => [
         // App\Models\User::class => [
         //     'keep_for' => '3 years',
@@ -56,8 +56,8 @@ return [
         // ],
     ],
 
-    // Les classes dont la règle est lue sur leurs attributs PHP.
-    // Une classe sans #[KeepFor] est ignorée sans bruit.
+    // The classes whose policy is read from their PHP attributes.
+    // A class without #[KeepFor] is skipped silently.
     'discover' => [
         // App\Models\User::class,
     ],

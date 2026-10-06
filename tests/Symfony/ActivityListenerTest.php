@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Le signal d'activité : une écriture de temps en temps, jamais à chaque requête.
+ * The activity signal: a write from time to time, never on every request.
  */
 final class ActivityListenerTest extends DoctrineTestCase
 {

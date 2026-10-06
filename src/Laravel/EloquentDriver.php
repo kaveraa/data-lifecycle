@@ -17,13 +17,11 @@ use Kaveraa\DataLifecycle\Step;
 use Kaveraa\DataLifecycle\Subject;
 
 /**
- * Le pilote Eloquent : il traduit les règles de conservation en requêtes.
- *
  * The Eloquent driver: it turns retention policies into queries.
  *
- * Une règle ne lit que les colonnes dont elle a besoin. Sans rappel, la colonne
- * de comptage n'apparaît jamais dans la requête ; sans anonymisation, la date
- * d'anonymisation non plus. On n'impose donc aucun schéma.
+ * A policy reads only the columns it needs. Without reminders, the counter
+ * column never appears in the query; without anonymisation, the anonymisation
+ * date does not either. So we do not force any schema.
  */
 final class EloquentDriver implements Driver
 {
@@ -47,7 +45,7 @@ final class EloquentDriver implements Driver
             $query->where($fields->since, '<=', $selection->cutoff);
             $query->whereNull($fields->disabledAt);
         } elseif ($policy->hasDisableStep()) {
-            // Effacement après désactivation : on compte depuis la désactivation.
+            // Erase after disable: we count from the disable date.
             $query->whereNotNull($fields->disabledAt);
             $query->where($fields->disabledAt, '<=', $selection->cutoff);
         } else {
@@ -104,9 +102,9 @@ final class EloquentDriver implements Driver
     }
 
     /**
-     * La personne est revenue : on remet le compteur, la désactivation et le
-     * dernier signe de vie à zéro. Sans ce dernier point la ligne repartirait
-     * aussitôt vers la désactivation.
+     * The person came back: we reset the counter, the disable date and the
+     * last sign of life. Without this last point the row would go straight
+     * back to the disable step.
      */
     public function reactivate(Policy $policy, Subject $subject, DateTimeImmutable $at): void
     {
@@ -145,7 +143,7 @@ final class EloquentDriver implements Driver
     }
 
     /**
-     * Le compteur de rappels peut être NULL en base : on le lit comme zéro.
+     * The reminder counter can be NULL in the database: we read it as zero.
      */
     private function whereWarnStage(Builder $query, string $column, int $index): void
     {
@@ -159,7 +157,7 @@ final class EloquentDriver implements Driver
     }
 
     /**
-     * Écriture directe : pas d'événement Eloquent, pas de updated_at touché.
+     * Direct write: no Eloquent event, updated_at is not touched.
      *
      * @param array<string, mixed> $values
      */
