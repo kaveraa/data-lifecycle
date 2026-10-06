@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Kaveraa\DataLifecycle\Laravel\Concerns\HasLifecycle;
 
 /**
- * Le parcours complet : rappels, désactivation, anonymisation.
+ * The full journey: reminders, disable, anonymisation.
  */
 class User extends Model
 {

@@ -7,7 +7,7 @@ namespace Kaveraa\DataLifecycle\Tests\Laravel\Fixtures;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Ni rappel ni désactivation : sa table n'a que la colonne last_active_at.
+ * No reminder, no disable step: its table only has the last_active_at column.
  */
 class Ping extends Model
 {

@@ -11,7 +11,7 @@ use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\Ticket;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\User;
 
 /**
- * Mode observation : le rapport annonce les bons nombres et la base ne bouge pas.
+ * Observe mode: the report gives the right numbers and the database does not change.
  */
 final class ObserveModeTest extends TestCase
 {
@@ -68,10 +68,10 @@ final class ObserveModeTest extends TestCase
         self::assertSame([$member->id], $report->samplesFor(Member::class, Step::Erase));
         self::assertSame([$ticket->id], $report->samplesFor(Ticket::class, Step::Erase));
 
-        // Colonne par colonne : rien n'a bougé.
+        // Column by column: nothing changed.
         self::assertEquals($before, $this->snapshot());
 
-        // Et on peut recommencer autant de fois qu'on veut.
+        // And we can do it again as many times as we want.
         self::assertSame(5, $this->lifecycle()->observe()->total());
         self::assertEquals($before, $this->snapshot());
     }

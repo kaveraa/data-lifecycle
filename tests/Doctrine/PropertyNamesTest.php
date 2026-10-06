@@ -10,7 +10,7 @@ use Kaveraa\DataLifecycle\Tests\Doctrine\Entity\Contact;
 use Kaveraa\DataLifecycle\Tests\Doctrine\Entity\Member;
 
 /**
- * Les noms des règles sont pensés pour des colonnes SQL, le DQL veut des propriétés.
+ * The policy names are meant for SQL columns, DQL wants properties.
  */
 final class PropertyNamesTest extends DoctrineTestCase
 {

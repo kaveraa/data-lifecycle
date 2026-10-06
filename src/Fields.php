@@ -5,22 +5,20 @@ declare(strict_types=1);
 namespace Kaveraa\DataLifecycle;
 
 /**
- * Les colonnes lues et écrites par le paquet sur vos tables.
- *
  * The columns the package reads and writes on your tables.
  */
 final class Fields
 {
     public function __construct(
-        /** Date du dernier signe de vie. Le paquet la lit ; il ne l'ecrit qu'au retour de la personne (reactivate). */
+        /** Date of the last sign of life. The package reads it; it writes it only when the person comes back (reactivate). */
         public readonly string $since = 'last_active_at',
-        /** Nombre de rappels déjà envoyés. Utile seulement avec #[WarnBefore]. */
+        /** Number of reminders already sent. Useful only with #[WarnBefore]. */
         public readonly string $warnStage = 'lifecycle_warn_stage',
-        /** Date du dernier rappel envoyé. Informative. */
+        /** Date of the last reminder sent. For information only. */
         public readonly string $warnedAt = 'lifecycle_warned_at',
-        /** Date de désactivation. Utile seulement avec #[DisableFirst]. */
+        /** Disable date. Useful only with #[DisableFirst]. */
         public readonly string $disabledAt = 'disabled_at',
-        /** Date d'anonymisation. Utile seulement avec #[ThenAnonymise]. */
+        /** Anonymisation date. Useful only with #[ThenAnonymise]. */
         public readonly string $anonymisedAt = 'anonymised_at',
     ) {
     }

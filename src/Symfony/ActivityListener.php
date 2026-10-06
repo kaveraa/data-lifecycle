@@ -13,19 +13,16 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Le signal d'activité : note le passage de la personne connectée, au plus une
- * fois toutes les N minutes.
- *
  * The activity signal: records that the connected person came by, at most once
  * every N minutes.
  *
- * Une écriture à chaque requête serait inacceptable en production : la date du
- * dernier signe de vie est donc relue sur l'entité, et n'est réécrite que si
- * elle a plus de N minutes. Rien n'est écrit sans personne connectée, sans
- * règle pour sa classe, ni sur les sous-requêtes.
+ * One write per request would be unacceptable in production: the date of the
+ * last sign of life is read back from the entity, and is written again only if
+ * it is older than N minutes. Nothing is written without a logged in person,
+ * without a policy for its class, or on sub-requests.
  *
- * Pour le désactiver complètement : data_lifecycle.activity.throttle = 0, le
- * service n'est alors pas enregistré.
+ * To turn it off completely: data_lifecycle.activity.throttle = 0, the
+ * service is then not registered.
  */
 final class ActivityListener implements EventSubscriberInterface
 {
@@ -34,7 +31,7 @@ final class ActivityListener implements EventSubscriberInterface
         private readonly PolicyRegistry $policies,
         private readonly ClockInterface $clock,
         private readonly CurrentUser $user,
-        /** Minutes entre deux écritures. 0 : ne rien écrire du tout. */
+        /** Minutes between two writes. 0: write nothing at all. */
         private readonly int $throttleMinutes = 15,
         private readonly PropertyNames $names = new PropertyNames(),
     ) {
@@ -80,7 +77,7 @@ final class ActivityListener implements EventSubscriberInterface
             return;
         }
 
-        // Écriture par les métadonnées : aucune entité n'est obligée d'avoir un setter.
+        // Write through the metadata: no entity is required to have a setter.
         $meta->setFieldValue($user, $property, $now);
 
         $this->entities->flush();

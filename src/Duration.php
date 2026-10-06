@@ -9,13 +9,11 @@ use DateTimeImmutable;
 use Kaveraa\DataLifecycle\Exception\InvalidDuration;
 
 /**
- * Une durée écrite en toutes lettres : "3 years", "30 days", "6 months".
- *
  * A duration written in plain words: "3 years", "30 days", "6 months".
  */
 final class Duration implements \Stringable
 {
-    /** @var array<string, string> unité -> lettre du format ISO 8601 */
+    /** @var array<string, string> unit -> letter of the ISO 8601 format */
     private const UNITS = [
         'second' => 'TS',
         'minute' => 'TM',
@@ -26,7 +24,7 @@ final class Duration implements \Stringable
         'year' => 'Y',
     ];
 
-    /** @var array<string, int> nombre de secondes, approximatif, pour comparer deux durées */
+    /** @var array<string, int> number of seconds, approximate, to compare two durations */
     private const SECONDS = [
         'second' => 1,
         'minute' => 60,
@@ -44,7 +42,7 @@ final class Duration implements \Stringable
     }
 
     /**
-     * Accepte "3 years", "1 day", "P30D", ou une Duration déjà construite.
+     * Accepts "3 years", "1 day", "P30D", or a Duration already built.
      */
     public static function parse(self|string $value): self
     {
@@ -104,7 +102,7 @@ final class Duration implements \Stringable
     }
 
     /**
-     * Nombre de secondes approximatif : sert seulement à ranger des durées entre elles.
+     * Approximate number of seconds: only used to sort durations.
      */
     public function approximateSeconds(): int
     {

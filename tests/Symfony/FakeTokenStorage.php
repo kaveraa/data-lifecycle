@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kaveraa\DataLifecycle\Tests\Symfony;
 
 /**
- * Le stockage de jeton de Symfony Security, réduit à ce que le paquet en lit :
- * le composant security n'est pas une dépendance.
+ * The Symfony Security token storage, reduced to what the package reads from it:
+ * the security component is not a dependency.
  */
 final class FakeTokenStorage
 {

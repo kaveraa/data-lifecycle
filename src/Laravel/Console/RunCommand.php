@@ -11,8 +11,6 @@ use Kaveraa\DataLifecycle\RunOptions;
 use Kaveraa\DataLifecycle\Step;
 
 /**
- * Joue le cycle de vie : prévenir, désactiver, effacer.
- *
  * Plays the lifecycle: warn, disable, erase.
  */
 final class RunCommand extends Command
@@ -74,7 +72,7 @@ final class RunCommand extends Command
     }
 
     /**
-     * Null quand la valeur donnée n'a pas de sens : le message est déjà affiché.
+     * Null when the given value makes no sense: the message is already shown.
      */
     private function limit(): ?int
     {

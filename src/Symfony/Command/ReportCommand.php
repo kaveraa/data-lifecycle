@@ -16,9 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Le même travail que lifecycle:run --dry-run, plus le rappel des règles.
- * Cette commande n'écrit jamais rien.
- *
  * The same work as lifecycle:run --dry-run, plus a reminder of the rules.
  * This command never writes anything.
  */

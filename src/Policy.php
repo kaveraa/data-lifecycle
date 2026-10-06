@@ -8,15 +8,12 @@ use DateTimeImmutable;
 use Kaveraa\DataLifecycle\Exception\InvalidPolicy;
 
 /**
- * La règle de conservation d'une entité : combien de temps on garde,
- * quand on prévient, quand on désactive, et ce qu'on fait à la fin.
- *
  * The retention rule of one entity: how long it is kept, when the person is
  * warned, when the row is disabled, and what happens at the end.
  */
 final class Policy
 {
-    /** @var list<Duration> du plus grand au plus petit / from the largest to the smallest */
+    /** @var list<Duration> from the largest to the smallest */
     public readonly array $warnBefore;
 
     /**
@@ -44,7 +41,7 @@ final class Policy
     }
 
     /**
-     * Construit une règle depuis un tableau de configuration.
+     * Builds a policy from a configuration array.
      *
      * @param array<string, mixed> $options
      */
@@ -94,8 +91,8 @@ final class Policy
     }
 
     /**
-     * Date à laquelle la ligne devra être désactivée (ou effacée s'il n'y a pas
-     * d'étape de désactivation), pour un dernier signe de vie donné.
+     * Date when the row will have to be disabled (or erased if there is no
+     * disable step), for a given last sign of life.
      */
     public function dueAt(DateTimeImmutable $since): DateTimeImmutable
     {
@@ -103,8 +100,8 @@ final class Policy
     }
 
     /**
-     * Toutes les lignes dont le dernier signe de vie est antérieur à cette date
-     * doivent recevoir le rappel numéro $index.
+     * All the rows whose last sign of life is before this date
+     * must receive reminder number $index.
      */
     public function warnCutoff(int $index, DateTimeImmutable $now): ?DateTimeImmutable
     {
@@ -119,9 +116,9 @@ final class Policy
     }
 
     /**
-     * Avec une étape de désactivation, on compare la date de désactivation au
-     * délai de grâce. Sans, on compare le dernier signe de vie à la durée de
-     * conservation.
+     * With a disable step, we compare the disable date to the grace period.
+     * Without it, we compare the last sign of life to the retention
+     * duration.
      */
     public function eraseCutoff(DateTimeImmutable $now): DateTimeImmutable
     {

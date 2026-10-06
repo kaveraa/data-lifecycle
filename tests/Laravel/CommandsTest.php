@@ -11,7 +11,7 @@ use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\User;
 use Symfony\Component\Console\Command\Command as Console;
 
 /**
- * Les trois commandes artisan.
+ * The three artisan commands.
  */
 final class CommandsTest extends TestCase
 {

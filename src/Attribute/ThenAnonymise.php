@@ -8,8 +8,6 @@ use Attribute;
 use Kaveraa\DataLifecycle\Strategy;
 
 /**
- * À la fin, la ligne reste mais les champs listés sont remplacés.
- *
  * At the end, the row stays but the listed fields are replaced.
  *
  *     #[ThenAnonymise('email', 'name')]
