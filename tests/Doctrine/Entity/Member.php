@@ -13,7 +13,7 @@ use Kaveraa\DataLifecycle\Attribute\WarnBefore;
 use Kaveraa\DataLifecycle\Strategy;
 
 /**
- * Le parcours complet : deux rappels, une désactivation, puis une anonymisation.
+ * The full journey: two reminders, a disable step, then an anonymisation.
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'members')]
@@ -29,7 +29,7 @@ class Member
     #[ORM\Column]
     public ?int $id = null;
 
-    /** Volontairement nullable : la requête doit passer par COALESCE. */
+    /** Nullable on purpose: the query must go through COALESCE. */
     #[ORM\Column(type: 'integer', nullable: true)]
     public ?int $lifecycleWarnStage = null;
 

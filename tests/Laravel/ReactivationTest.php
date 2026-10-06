@@ -11,7 +11,7 @@ use Kaveraa\DataLifecycle\Stage;
 use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\User;
 
 /**
- * La personne revient pendant la période de grâce : tout repart à zéro.
+ * The person comes back during the grace period: everything is reset.
  */
 final class ReactivationTest extends TestCase
 {
@@ -23,7 +23,7 @@ final class ReactivationTest extends TestCase
             'last_active_at' => '2024-01-01 00:00:00',
         ]);
 
-        // Rappels puis désactivation.
+        // Reminders then disable.
         $this->moveTo('2026-12-05 09:00:00');
         $this->lifecycle()->run();
         $this->moveTo('2026-12-28 09:00:00');
@@ -38,7 +38,7 @@ final class ReactivationTest extends TestCase
             $seen[] = $event->subject->id;
         });
 
-        // Elle revient avant la fin de la grâce.
+        // She comes back before the end of the grace period.
         $this->moveTo('2027-01-10 09:00:00');
 
         self::assertTrue($user->fresh()->reactivate());
@@ -52,7 +52,7 @@ final class ReactivationTest extends TestCase
         self::assertSame('sacha@example.test', $row->email);
         self::assertSame(Stage::Active, $user->fresh()->lifecycleStage());
 
-        // Et la ligne n'est plus candidate à rien, même après la fin de la grâce.
+        // And the row is no longer a candidate for anything, even after the grace period ends.
         $this->moveTo('2027-02-20 09:00:00');
         self::assertTrue($this->lifecycle()->run()->isEmpty());
 

@@ -14,8 +14,8 @@ use Kaveraa\DataLifecycle\Step;
 use Kaveraa\DataLifecycle\Subject;
 
 /**
- * Pilote en mémoire : il applique exactement les mêmes règles de sélection que
- * les pilotes Eloquent et Doctrine, mais sur des tableaux.
+ * In-memory driver: it applies exactly the same selection rules as
+ * the Eloquent and Doctrine drivers, but on arrays.
  */
 final class ArrayDriver implements Driver
 {

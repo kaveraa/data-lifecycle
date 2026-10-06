@@ -10,7 +10,7 @@ use Kaveraa\DataLifecycle\Attribute\KeepFor;
 use Kaveraa\DataLifecycle\Attribute\ThenAnonymise;
 
 /**
- * Sans étape de désactivation : on anonymise dès la fin de la conservation.
+ * Without a disable step: we anonymise as soon as the retention ends.
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'subscribers')]

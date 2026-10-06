@@ -7,19 +7,17 @@ namespace Kaveraa\DataLifecycle;
 use DateTimeImmutable;
 
 /**
- * Le pont entre le paquet et votre base : une implémentation par ORM.
- *
  * The bridge between the package and your database: one implementation per ORM.
  */
 interface Driver
 {
     /**
-     * Les lignes à traiter pour cette étape.
+     * The rows to handle for this step.
      *
-     * Warn    : dernier signe de vie <= cutoff, et rappel numéro $warnIndex pas encore envoyé.
-     * Disable : dernier signe de vie <= cutoff, pas encore désactivée ni effacée.
-     * Erase   : date de désactivation <= cutoff (ou dernier signe de vie s'il n'y a pas
-     *           d'étape de désactivation), pas encore effacée.
+     * Warn    : last sign of life <= cutoff, and reminder number $warnIndex not sent yet.
+     * Disable : last sign of life <= cutoff, not disabled nor erased yet.
+     * Erase   : disable date <= cutoff (or last sign of life if there is no
+     *           disable step), not erased yet.
      *
      * @return iterable<Subject>
      */
@@ -37,17 +35,17 @@ interface Driver
     public function delete(Policy $policy, Subject $subject): void;
 
     /**
-     * Remet la ligne à zéro : plus de rappel envoyé, plus de désactivation.
+     * Resets the row: no reminder sent, no disable date.
      */
     public function reactivate(Policy $policy, Subject $subject, DateTimeImmutable $at): void;
 
     /**
-     * Retrouve une ligne par son identifiant, pour les actions à l'unité.
+     * Finds one row by its id, for single-row actions.
      */
     public function find(Policy $policy, int|string $id): ?Subject;
 
     /**
-     * Enveloppe un objet déjà chargé par l'application.
+     * Wraps an object already loaded by the application.
      */
     public function subject(Policy $policy, object $entity): Subject;
 }

@@ -7,7 +7,7 @@ namespace Kaveraa\DataLifecycle\Tests\Support;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Garde tous les événements émis, pour les vérifier dans les tests.
+ * Keeps all the emitted events, to check them in the tests.
  */
 final class Recorder implements EventDispatcherInterface
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kaveraa\DataLifecycle\Tests\Support;
 
 /**
- * Une ligne en mémoire, pour tester le cœur sans base de données.
+ * An in-memory row, to test the core without a database.
  */
 final class Row
 {

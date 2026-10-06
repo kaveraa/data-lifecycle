@@ -7,33 +7,31 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Migration d'exemple. Gardez seulement les colonnes dont vos règles ont besoin.
- *
  * Example migration. Keep only the columns your policies need.
  */
 return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table): void {
-            // Obligatoire : la date du dernier signe de vie. Tout part de là.
+            // Required: the date of the last sign of life. Everything starts from it.
             $table->timestamp('last_active_at')->nullable();
 
-            // Facultative : nombre de rappels déjà envoyés.
-            // Inutile si votre règle ne prévoit aucun rappel.
+            // Optional: number of reminders already sent.
+            // Not needed if your policy has no reminder.
             $table->unsignedTinyInteger('lifecycle_warn_stage')->default(0);
 
-            // Facultative : date du dernier rappel. Purement informative.
+            // Optional: date of the last reminder. For information only.
             $table->timestamp('lifecycle_warned_at')->nullable();
 
-            // Facultative : date de désactivation.
-            // Inutile si votre règle n'a pas de période de grâce.
+            // Optional: disable date.
+            // Not needed if your policy has no grace period.
             $table->timestamp('disabled_at')->nullable();
 
-            // Facultative : date d'anonymisation.
-            // Inutile si votre règle se termine par une suppression.
+            // Optional: anonymisation date.
+            // Not needed if your policy ends with a deletion.
             $table->timestamp('anonymised_at')->nullable();
 
-            // Les deux colonnes filtrées à chaque passage : on les indexe.
+            // The two columns filtered on each run: we index them.
             $table->index('last_active_at');
             $table->index('disabled_at');
         });

@@ -7,12 +7,10 @@ namespace Kaveraa\DataLifecycle\Attribute;
 use Attribute;
 
 /**
- * À la fin, la ligne est supprimée.
- *
  * At the end, the row is deleted.
  *
  *     #[ThenDelete]
- *     #[ThenDelete(force: true)] // ignore le soft delete
+ *     #[ThenDelete(force: true)] // ignores the soft delete
  */
 #[Attribute(Attribute::TARGET_CLASS)]
 final class ThenDelete

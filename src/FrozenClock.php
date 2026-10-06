@@ -8,8 +8,6 @@ use DateTimeImmutable;
 use Psr\Clock\ClockInterface;
 
 /**
- * Une horloge arrêtée, pour les tests et pour rejouer une exécution à une date donnée.
- *
  * A stopped clock, for tests and to replay a run at a given date.
  */
 final class FrozenClock implements ClockInterface

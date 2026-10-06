@@ -7,8 +7,6 @@ namespace Kaveraa\DataLifecycle;
 use Kaveraa\DataLifecycle\Exception\InvalidPolicy;
 
 /**
- * Toutes les règles de l'application, par classe.
- *
  * All the policies of the application, by class.
  */
 final class PolicyRegistry
@@ -50,7 +48,7 @@ final class PolicyRegistry
     }
 
     /**
-     * Cherche la règle d'un objet, en remontant les classes parentes.
+     * Looks for the policy of an object, going up the parent classes.
      */
     public function for(object $entity): ?Policy
     {

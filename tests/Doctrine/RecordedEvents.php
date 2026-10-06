@@ -7,7 +7,7 @@ namespace Kaveraa\DataLifecycle\Tests\Doctrine;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Un répartiteur qui garde tout, pour vérifier ce que le paquet annonce.
+ * A dispatcher that keeps everything, to check what the package announces.
  */
 final class RecordedEvents implements EventDispatcherInterface
 {

@@ -7,8 +7,6 @@ namespace Kaveraa\DataLifecycle\Attribute;
 use Attribute;
 
 /**
- * Prévenir la personne avant l'échéance. À répéter pour plusieurs rappels.
- *
  * Warn the person before the deadline. Repeat it for several reminders.
  *
  *     #[WarnBefore('30 days')]

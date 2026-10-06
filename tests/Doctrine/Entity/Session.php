@@ -10,8 +10,8 @@ use Kaveraa\DataLifecycle\Attribute\KeepFor;
 use Kaveraa\DataLifecycle\Attribute\ThenDelete;
 
 /**
- * Le minimum : une seule propriété du paquet, le dernier signe de vie.
- * Aucun compteur de rappel, aucune date de désactivation ni d'anonymisation.
+ * The minimum: a single package property, the last sign of life.
+ * No reminder counter, no disable date, no anonymisation date.
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'sessions')]

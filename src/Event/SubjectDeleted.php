@@ -9,8 +9,6 @@ use Kaveraa\DataLifecycle\Policy;
 use Kaveraa\DataLifecycle\Subject;
 
 /**
- * La ligne a été supprimée.
- *
  * The row has been deleted.
  */
 final class SubjectDeleted

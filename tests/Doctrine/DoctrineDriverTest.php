@@ -46,11 +46,11 @@ final class DoctrineDriverTest extends DoctrineTestCase
         self::assertSame(Stage::Active, $lifecycle->stageOf($fresh));
         self::assertSame(['SubjectReactivated'], $this->events->names());
 
-        // Le retour est un signe de vie : le compteur repart de la date du retour.
+        // Coming back is a sign of life: the clock restarts from the return date.
         self::assertSame('2023-01-02 12:00', $fresh->lastActiveAt?->format('Y-m-d H:i'));
         self::assertSame('2026-01-02 12:00', $lifecycle->dueAt($fresh)?->format('Y-m-d H:i'));
 
-        // Sans quoi la ligne serait redésactivée dès l'exécution suivante.
+        // Otherwise the row would be disabled again on the next run.
         $this->clock->moveTo('2023-02-05 12:00:00');
 
         self::assertTrue($lifecycle->run()->isEmpty());
@@ -149,7 +149,7 @@ final class DoctrineDriverTest extends DoctrineTestCase
         $kept = $this->reload(Session::class, $recentId);
 
         self::assertNotNull($kept);
-        // Aucune propriété de suivi sur cette entité : le paquet n'impose rien.
+        // No tracking property on this entity: the package forces nothing.
         self::assertSame(Stage::Active, $lifecycle->stageOf($kept));
         self::assertSame('2023-01-27 09:00', $lifecycle->dueAt($kept)?->format('Y-m-d H:i'));
     }
@@ -168,7 +168,7 @@ final class DoctrineDriverTest extends DoctrineTestCase
         self::assertSame(1, $contact->setterCalls);
         self::assertSame('2022-01-05 12:00', $contact->blockedAt()?->format('Y-m-d H:i'));
 
-        // Grâce de dix jours, puis suppression.
+        // Ten days of grace, then deletion.
         $this->clock->moveTo('2022-01-10 12:00:00');
 
         self::assertTrue($lifecycle->run()->isEmpty());

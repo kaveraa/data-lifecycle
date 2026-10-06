@@ -13,8 +13,6 @@ use Kaveraa\DataLifecycle\Step;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Ce que les deux commandes partagent : lire les options et écrire les tableaux.
- *
  * What the two commands share: reading the options and printing the tables.
  */
 final class ConsoleSupport
@@ -39,7 +37,7 @@ final class ConsoleSupport
     }
 
     /**
-     * Accepte le nom complet de la classe ou son nom court, sans tenir compte de la casse.
+     * Accepts the full class name or its short name, case does not matter.
      *
      * @param list<string> $names
      *
@@ -76,8 +74,8 @@ final class ConsoleSupport
     }
 
     /**
-     * La limite demandée, ou celle de la configuration. Null quand la valeur
-     * donnée n'a pas de sens : le message est déjà affiché.
+     * The requested limit, or the one from the configuration. Null when the
+     * given value makes no sense: the message is already shown.
      */
     public static function limit(SymfonyStyle $io, mixed $given, int $default): ?int
     {
@@ -93,7 +91,7 @@ final class ConsoleSupport
     }
 
     /**
-     * Ce qui a été fait, ou ce qui serait fait : une ligne par entité et par étape.
+     * What was done, or what would be done: one line per entity and per step.
      */
     public static function table(SymfonyStyle $io, Report $report): void
     {
@@ -119,7 +117,7 @@ final class ConsoleSupport
     }
 
     /**
-     * Une ligne par règle : durée de conservation, rappels, grâce et fin.
+     * One line per policy: retention duration, reminders, grace and ending.
      *
      * @param list<Policy> $policies
      */
@@ -149,7 +147,7 @@ final class ConsoleSupport
     }
 
     /**
-     * Le nom francais de l'etape, le meme que du cote Laravel.
+     * The French name of the step, the same as on the Laravel side.
      */
     private static function label(Step $step): string
     {

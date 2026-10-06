@@ -14,16 +14,13 @@ use Kaveraa\DataLifecycle\PolicyRegistry;
 use Kaveraa\DataLifecycle\Stage;
 
 /**
- * À poser sur un modèle soumis à une règle de conservation : trois filtres et
- * trois raccourcis vers le service Lifecycle.
- *
  * To put on a model covered by a retention policy: three query filters and
  * three shortcuts to the Lifecycle service.
  */
 trait HasLifecycle
 {
     /**
-     * Ni désactivée, ni anonymisée.
+     * Neither disabled nor anonymised.
      *
      * @param Builder<static> $query
      */
@@ -63,8 +60,8 @@ trait HasLifecycle
     }
 
     /**
-     * Date de désactivation prévue, ou d'effacement s'il n'y a pas d'étape de
-     * désactivation. Null si le dernier signe de vie est inconnu.
+     * Planned disable date, or erase date if there is no disable step.
+     * Null if the last sign of life is unknown.
      */
     public function lifecycleDueAt(): ?DateTimeImmutable
     {
@@ -72,7 +69,7 @@ trait HasLifecycle
     }
 
     /**
-     * La personne est revenue. Faux si la ligne est déjà anonymisée.
+     * The person came back. False if the row is already anonymised.
      */
     public function reactivate(): bool
     {

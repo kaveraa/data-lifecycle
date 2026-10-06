@@ -21,7 +21,7 @@ use Kaveraa\DataLifecycle\Runner;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Un EntityManager SQLite en mémoire, les entités de test, une horloge arrêtée.
+ * An in-memory SQLite EntityManager, the test entities, a stopped clock.
  */
 abstract class DoctrineTestCase extends TestCase
 {
@@ -56,8 +56,8 @@ abstract class DoctrineTestCase extends TestCase
     }
 
     /**
-     * Le point d'entrée du paquet, branché sur les règles lues dans les attributs
-     * des classes données.
+     * The entry point of the package, wired to the policies read from the
+     * attributes of the given classes.
      */
     protected function lifecycleOf(string ...$classes): Lifecycle
     {
@@ -78,7 +78,7 @@ abstract class DoctrineTestCase extends TestCase
     }
 
     /**
-     * Relit la ligne depuis la base, sans rien garder en mémoire.
+     * Reads the row again from the database, keeping nothing in memory.
      *
      * @template T of object
      *

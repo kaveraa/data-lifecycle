@@ -17,8 +17,8 @@ use Orchestra\Testbench\TestCase as Testbench;
 use Psr\Clock\ClockInterface;
 
 /**
- * Socle des tests Laravel : le fournisseur de services, quatre tables de
- * démonstration et une horloge arrêtée que chaque test fait avancer.
+ * Base of the Laravel tests: the service provider, four demo tables
+ * and a stopped clock that each test moves forward.
  */
 abstract class TestCase extends Testbench
 {
@@ -53,7 +53,7 @@ abstract class TestCase extends Testbench
 
     protected function defineDatabaseMigrations(): void
     {
-        // Le parcours complet : toutes les colonnes.
+        // The full journey: all the columns.
         Schema::create('users', function (Blueprint $table): void {
             $table->increments('id');
             $table->string('name')->nullable();
@@ -66,7 +66,7 @@ abstract class TestCase extends Testbench
             $table->timestamps();
         });
 
-        // Anonymisation directe : ni compteur de rappels ni désactivation.
+        // Direct anonymisation: no reminder counter, no disable date.
         Schema::create('members', function (Blueprint $table): void {
             $table->increments('id');
             $table->string('email')->nullable();
@@ -75,7 +75,7 @@ abstract class TestCase extends Testbench
             $table->timestamps();
         });
 
-        // Suppression : pas de date d'anonymisation.
+        // Deletion: no anonymisation date.
         Schema::create('tickets', function (Blueprint $table): void {
             $table->increments('id');
             $table->string('label')->nullable();
@@ -84,7 +84,7 @@ abstract class TestCase extends Testbench
             $table->timestamps();
         });
 
-        // Le minimum absolu : une seule colonne en plus de la clé.
+        // The absolute minimum: a single column besides the key.
         Schema::create('pings', function (Blueprint $table): void {
             $table->increments('id');
             $table->timestamp('last_active_at')->nullable();
@@ -120,7 +120,7 @@ abstract class TestCase extends Testbench
     }
 
     /**
-     * Ticket porte ses attributs, Member n'en a aucun : il doit être ignoré.
+     * Ticket has its attributes, Member has none: it must be skipped.
      *
      * @return list<class-string>
      */

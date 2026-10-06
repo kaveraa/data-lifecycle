@@ -12,8 +12,6 @@ use Psr\Clock\ClockInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Joue les trois étapes d'une règle : prévenir, désactiver, effacer.
- *
  * Plays the three steps of a policy: warn, disable, erase.
  */
 final class Runner

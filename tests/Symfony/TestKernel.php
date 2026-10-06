@@ -15,13 +15,13 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * Application Symfony minimale : FrameworkBundle + DoctrineBundle + DataLifecycleBundle.
+ * Minimal Symfony application: FrameworkBundle + DoctrineBundle + DataLifecycleBundle.
  */
 final class TestKernel extends Kernel
 {
     use MicroKernelTrait;
 
-    /** @var list<string> services rendus publics pour les tests */
+    /** @var list<string> services made public for the tests */
     public const EXPOSED = [
         'Kaveraa\DataLifecycle\Lifecycle',
         'Kaveraa\DataLifecycle\PolicyRegistry',
@@ -38,7 +38,7 @@ final class TestKernel extends Kernel
     ];
 
     /**
-     * @param array<string, mixed> $lifecycle configuration data_lifecycle
+     * @param array<string, mixed> $lifecycle the data_lifecycle configuration
      */
     public function __construct(private readonly array $lifecycle = [])
     {
@@ -53,8 +53,8 @@ final class TestKernel extends Kernel
     }
 
     /**
-     * Tout ce que Symfony écrit reste dans un dossier temporaire : le dépôt du
-     * paquet ne doit jamais recevoir de fichier généré.
+     * Everything Symfony writes stays in a temporary folder: the package
+     * repository must never receive a generated file.
      */
     public function getProjectDir(): string
     {
@@ -84,7 +84,7 @@ final class TestKernel extends Kernel
 
     protected function build(ContainerBuilder $container): void
     {
-        // Les services du paquet sont privés : les tests ont besoin de les lire.
+        // The package services are private: the tests need to read them.
         $container->addCompilerPass(new class implements CompilerPassInterface {
             public function process(ContainerBuilder $container): void
             {

@@ -11,13 +11,13 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Démarre l'application de test, crée le schéma, et remet tout en place après.
+ * Boots the test application, creates the schema, and puts everything back after.
  */
 abstract class BundleTestCase extends TestCase
 {
     private ?TestKernel $kernel = null;
 
-    /** @var callable|null gestionnaire d'exceptions actif avant le démarrage du kernel */
+    /** @var callable|null exception handler active before the kernel boots */
     private mixed $exceptionHandler = null;
 
     protected function setUp(): void
@@ -33,14 +33,14 @@ abstract class BundleTestCase extends TestCase
             $this->kernel = null;
         }
 
-        // Symfony installe parfois un gestionnaire d'exceptions sans le retirer.
+        // Symfony sometimes installs an exception handler without removing it.
         while (self::currentExceptionHandler() !== $this->exceptionHandler) {
             restore_exception_handler();
         }
     }
 
     /**
-     * @param array<string, mixed> $config configuration data_lifecycle
+     * @param array<string, mixed> $config the data_lifecycle configuration
      */
     protected function boot(array $config = []): ContainerInterface
     {

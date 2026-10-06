@@ -11,9 +11,6 @@ use Psr\Clock\ClockInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Le point d'entrée de l'application : lancer le cycle, savoir où en est une
- * ligne, et faire revenir quelqu'un qui s'était absenté.
- *
  * The entry point for the application: run the cycle, know where a row stands,
  * and bring back someone who had been away.
  */
@@ -34,7 +31,7 @@ final class Lifecycle
     }
 
     /**
-     * Ne rien écrire, seulement dire ce qui se passerait.
+     * Write nothing, only say what would happen.
      */
     public function observe(int $limit = 1000): Report
     {
@@ -52,15 +49,15 @@ final class Lifecycle
     }
 
     /**
-     * Où en est cette ligne dans son cycle de vie.
+     * Where this row stands in its lifecycle.
      */
     public function stageOf(object $entity): Stage
     {
         $policy = $this->policyOf($entity);
         $subject = $this->driver->subject($policy, $entity);
 
-        // On ne lit que les colonnes que la regle utilise : une entite qui n'est
-        // jamais anonymisee n'a pas de colonne d'anonymisation.
+        // We read only the columns the policy uses: an entity that is never
+        // anonymised has no anonymisation column.
         if ($policy->ending === Ending::Anonymise && $subject->date($policy->fields->anonymisedAt) !== null) {
             return Stage::Erased;
         }
@@ -77,8 +74,8 @@ final class Lifecycle
     }
 
     /**
-     * Date à laquelle cette ligne sera désactivée, ou effacée s'il n'y a pas
-     * d'étape de désactivation. Null si le dernier signe de vie est inconnu.
+     * Date when this row will be disabled, or erased if there is no disable
+     * step. Null if the last sign of life is unknown.
      */
     public function dueAt(object $entity): ?DateTimeImmutable
     {
@@ -89,16 +86,16 @@ final class Lifecycle
     }
 
     /**
-     * La personne est revenue : on efface les rappels et la désactivation.
-     * Une ligne déjà anonymisée ne revient pas.
+     * The person came back: we clear the reminders and the disable date.
+     * A row already anonymised does not come back.
      */
     public function reactivate(object $entity): bool
     {
         $policy = $this->policyOf($entity);
         $subject = $this->driver->subject($policy, $entity);
 
-        // Une ligne deja anonymisee ne revient pas. On ne lit la colonne que si
-        // la regle anonymise : sinon l'entite n'a pas cette propriete.
+        // A row already anonymised does not come back. We read the column only if
+        // the policy anonymises: otherwise the entity has no such property.
         if ($policy->ending === Ending::Anonymise && $subject->date($policy->fields->anonymisedAt) !== null) {
             return false;
         }

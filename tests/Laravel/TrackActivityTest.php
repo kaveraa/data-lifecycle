@@ -11,7 +11,7 @@ use Kaveraa\DataLifecycle\Tests\Laravel\Fixtures\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Le signal d'activité : une écriture de temps en temps, pas une par requête.
+ * The activity signal: a write from time to time, not one per request.
  */
 final class TrackActivityTest extends TestCase
 {
@@ -24,26 +24,26 @@ final class TrackActivityTest extends TestCase
 
         DB::table('users')->where('id', $user->id)->update(['updated_at' => '2024-01-01 00:00:00']);
 
-        // Première requête : la date est inconnue, on écrit.
+        // First request: the date is unknown, we write.
         $this->moveTo('2024-03-01 10:00:00');
         $this->pass($user->fresh());
 
         self::assertSame('2024-03-01 10:00:00', DB::table('users')->find($user->id)->last_active_at);
 
-        // Cinq minutes plus tard : dans la fenêtre, on ne touche à rien.
+        // Five minutes later: inside the window, we touch nothing.
         $this->moveTo('2024-03-01 10:05:00');
         $queries = $this->passAndCountQueries($user->fresh());
 
         self::assertSame(0, $queries);
         self::assertSame('2024-03-01 10:00:00', DB::table('users')->find($user->id)->last_active_at);
 
-        // Une demi-heure plus tard : la fenêtre est passée, on réécrit.
+        // Half an hour later: the window has passed, we write again.
         $this->moveTo('2024-03-01 10:31:00');
         $this->pass($user->fresh());
 
         self::assertSame('2024-03-01 10:31:00', DB::table('users')->find($user->id)->last_active_at);
 
-        // Et updated_at n'a jamais bougé.
+        // And updated_at never changed.
         self::assertSame('2024-01-01 00:00:00', DB::table('users')->find($user->id)->updated_at);
     }
 
@@ -69,13 +69,13 @@ final class TrackActivityTest extends TestCase
 
         $user = User::query()->create(['last_active_at' => '2024-03-01 10:00:00']);
 
-        // Trente secondes : encore dans la fenetre d'une minute.
+        // Thirty seconds: still inside the one minute window.
         $this->moveTo('2024-03-01 10:00:30');
         $this->pass($user->fresh());
 
         self::assertSame('2024-03-01 10:00:00', DB::table('users')->find($user->id)->last_active_at);
 
-        // Deux minutes : la fenetre est passee.
+        // Two minutes: the window has passed.
         $this->moveTo('2024-03-01 10:02:00');
         $this->pass($user->fresh());
 

@@ -11,9 +11,6 @@ use Kaveraa\DataLifecycle\PolicyFactory;
 use Kaveraa\DataLifecycle\PolicyRegistry;
 
 /**
- * Rassemble les règles : d'abord celles lues sur les attributs des classes
- * listées dans "discover", puis celles écrites dans "subjects", qui gagnent.
- *
  * Gathers the policies: first the ones read from the attributes of the classes
  * listed under "discover", then the ones written under "subjects", which win.
  */
@@ -36,7 +33,7 @@ final class PolicyBuilder
             $class = (string) $class;
             $options = is_array($options) ? $options : [];
 
-            // Entrée vide : on garde la règle des attributs, si la classe en porte.
+            // Empty entry: we keep the policy from the attributes, if the class has one.
             if ($options === []) {
                 if (!$registry->has($class)) {
                     self::addFromAttributes($registry, $factory, $class);

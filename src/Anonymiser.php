@@ -7,8 +7,6 @@ namespace Kaveraa\DataLifecycle;
 use DateTimeImmutable;
 
 /**
- * Calcule la valeur de remplacement de chaque champ à anonymiser.
- *
  * Works out the replacement value of every field to anonymise.
  */
 final class Anonymiser
